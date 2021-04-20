@@ -2,21 +2,6 @@
 console.log("HELLO");
 
 
-//get a SHA-256 hash from a file --> works synchronously
-function calculateHash (fileName) {
-  let fileContent = fs.readFileSync(fileName);
-  return calculateHashBytes(fileContent);
-};
-
-//get a SHA-256 hash from a data Buffer --> works synchronously
-function calculateHashBytes (data) {
-  let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
-  shaObj.update(data);
-  let hash = "0x" + shaObj.getHash("HEX");
-  return hash;
-};
-
-
 $('document').ready(function(){
 
 //ADD MINESTRY
@@ -57,12 +42,29 @@ async function addHub() {
 }
 
 //ADD USER
+var hashDocumentID_user;
+document.getElementById('inputUserAddress').addEventListener('change', hashFileIDUser, false);
+async function hashFileIDUser(evt) {
+    const file = document.getElementById('inputUserAddress').files[0];
+	var reader = new FileReader();
+    let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
+	shaObj.update(reader.readAsArrayBuffer(file));
+	hashDocumentID_user = "0x" + shaObj.getHash("HEX");
+	console.log(hashDocumentID_user);
+	try {
+		$("#hashDocumentIDUser").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>'+hashDocumentID_user+'</div>');
+	} catch (error) {
+		$("#hashDocumentIDUser").html('<div class="alert alert-primary" role="alert">'+error+'</div>');
+	}
+}
+
 document.getElementById("buttonAddUser").onclick = function() {addUser()};
 var inputAddUser = document.getElementById("inputAddUser")
 
 async function addUser() {
   if (inputAddUser.value == "0x"){
   	inputAddUser.value = '';
+  	console.log("ID "+hashDocumentID_user);
   	$("#allertAddUser").html('<div class="alert alert-success alert-dismissible fade show" id="allertUser" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
   	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
   	setTimeout(function() {$("#allertUser").remove();}, 10000);
@@ -76,46 +78,50 @@ async function addUser() {
 }
 
 //TEST PUBLISH
-document.getElementById("buttonTestPublish").onclick = function() {testPublish()};
-var inputTestPublish = document.getElementById("inputTestPublish")
-document.getElementById('inputTestDocumentID').addEventListener('change', handleFileSelect);
-
-function handleFileSelect(evt) {
-    //var files = evt.target.files; // FileList object
-    // Loop through the FileList and render image files as thumbnails.
+var hashDocumentID_testP;
+var hashDocument_testP;
+var positivity_testP;
+document.getElementById('inputTestDocumentID').addEventListener('change', hashFileID, false);
+async function hashFileID(evt) {
     const file = document.getElementById('inputTestDocumentID').files[0];
 	var reader = new FileReader();
     let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
 	shaObj.update(reader.readAsArrayBuffer(file));
-	let documentHash = "0x" + shaObj.getHash("HEX");
-	console.log(documentHash);
-
+	hashDocumentID_testP = "0x" + shaObj.getHash("HEX");
+	console.log(hashDocumentID_testP);
 	try {
-		$("#hashTestDocumentID").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>'+documentHash+'</div>');
-
+		$("#hashTestDocumentID").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>'+hashDocumentID_testP+'</div>');
 	} catch (error) {
-		document.getElementById("hashTestDocumentID").innerHTML = error;
+		$("#hashTestDocumentID").html('<div class="alert alert-primary" role="alert">'+error+'</div>');
 	}
 }
 
-async function uploadDocument() {
-	console.log($('#inputDocumentID')[0]);
-    if ($('#inputDocumentID').length > 0){
-    	let fileReader = new FileReader();
-    	fileReader.onload = function() {
-    		let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
-			shaObj.update(fileReader.readAsArrayBuffer( ));
-			let documentHash = "0x" + shaObj.getHash("HEX");
-            console.log(documentHash);
-        }
-    }else{console.log("NO FILE");}
+document.getElementById('inputDocumentTest').addEventListener('change', hashFile, false);
+async function hashFile(evt) {
+    const file = document.getElementById('inputTestDocumentID').files[0];
+	var reader = new FileReader();
+    let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
+	shaObj.update(reader.readAsArrayBuffer(file));
+	hashDocument_testP = "0x" + shaObj.getHash("HEX");
+	console.log(hashDocument_testP);
+	try {
+		$("#hashTestDocument").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>'+hashDocument_testP+'</div>');
+	} catch (error) {
+		$("#hashTestDocument").html('<div class="alert alert-primary" role="alert">'+error+'</div>');
+	}
 }
 
-
+document.getElementById("buttonTestPublish").onclick = function() {testPublish()};
+var inputTestPublish = document.getElementById("inputTestPublish")
 async function testPublish() {
   if (inputTestPublish.value == "0x"){
   	//uploadDocument();
   	inputTestPublish.value = '';
+  	console.log("ID "+hashDocumentID_testP);
+  	console.log("TEst "+hashDocument_testP);
+  	//selector
+  	positivity = document.getElementById("inputPosivity").value;
+	console.log(positivity);
   	$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" id="allertTest" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
   	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
   	setTimeout(function() {$("#allertTest").remove();}, 10000);

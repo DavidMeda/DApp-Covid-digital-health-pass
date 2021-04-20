@@ -52,7 +52,7 @@
          <div class="container" id="minestry and hub">
             <div class="row">
                <div class="col">
-                  <div class="container" id="add minestry" style="background-color: rgba(0, 0, 0, 0.05);margin-bottom: 10px;margin-top: 10px;">
+                  <div class="container" id="add minestry" style="margin-bottom: 10px;margin-top: 10px;background-color: rgba(0, 0, 0, 0.05);">
                      <h1>ADD Minestry</h1>
                      <p>***Some text to add***</p>
                      <div class="row-6">
@@ -87,16 +87,16 @@
                <p>***Some text to add***</p>
                <div class="row">
                   <div class="col-6">
-                     <div class="input-group mb-3">
-                        <div class="custom-file">
-                           <input type="file" class="custom-file-input" id="inputUserAddress">
-                           <label class="custom-file-label" for="inputUserAddress">Choose file document ID</label>
-                        </div>
-                        <div class="input-group-append">
-                           <span class="input-group-text" id="">Calculate HASH</span>
-                        </div>
+                        <div class="input-group mb-3" style="overflow:hidden; word-wrap:break-word;">
+                        <form>
+                           <div class="form-group">
+                              <label for="inputUserAddress">1. Choose file document ID input</label>
+                              <input type="file" class="form-control-file" id="inputUserAddress">
+                           </div> 
+                        </form>
+                     <div id ="hashDocumentIDUser" display="inline" style="overflow:hidden; word-wrap:break-word;"></div>
                      </div>
-                     <small id="Hash result" class="form-text text-muted">Your hash of dicument ID:</small>
+  
                   </div>
                   <div class="col-6">
                      <div class="input-group mb-3">
@@ -116,14 +116,14 @@
                <p>***Some text to add***</p>
                <div class="row">
                   <div class="col-6">
-                     <div class="input-group mb-3">
+                     <div class="input-group mb-3" display="inline" style="overflow:hidden; word-wrap:break-word;">
                         <form>
                            <div class="form-group">
                               <label for="inputTestDocumentID">1. Choose file document ID input</label>
                               <input type="file" class="form-control-file" id="inputTestDocumentID">
-                           </div>
-                           <div id ="hashTestDocumentID"></div>
+                           </div> 
                         </form>
+                     <div id ="hashTestDocumentID" display="inline" style="overflow:hidden; word-wrap:break-word;"></div>
                      </div>
                      <div class="input-group mb-3">
                         <form>
@@ -132,6 +132,7 @@
                               <input type="file" class="form-control-file" id="inputDocumentTest">
                            </div>
                         </form>
+                        <div id ="hashTestDocument" display="inline" style="overflow:hidden; word-wrap:break-word;"></div>
                      </div>
                   </div>
                   <div class="col-6">
@@ -139,8 +140,8 @@
                         <div class="input-group-prepend">
                            <label class="input-group-text" for="inputGroupSelect01">Result Test</label>
                         </div>
-                        <select class="custom-select" id="inputSelectResult">
-                           <option selected="">Choose...</option>
+                        <select class="custom-select" id="inputPosivity">
+                           <option value="" selected="">Choose...</option>
                            <option value="true">Positive</option>
                            <option value="false">Negative</option>
                         </select>
