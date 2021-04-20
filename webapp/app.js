@@ -23,7 +23,7 @@ $('document').ready(function(){
 document.getElementById("buttonAddressMinestry").onclick = function() {addMinestry()};
 var inputAddressMinestry = document.getElementById("inputAddressMinestry")
 
-function addMinestry() {
+async function addMinestry() {
   if (inputAddressMinestry.value == "0x"){
   	inputAddressMinestry.value = '';
   	$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
@@ -41,7 +41,7 @@ function addMinestry() {
 document.getElementById("buttonAddressHub").onclick = function() {addHub()};
 var inputAddressHub = document.getElementById("inputAddressHub")
 
-function addHub() {
+async function addHub() {
   if (inputAddressHub.value == "0x"){
   	inputAddressHub.value = '';
   	$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allertHub" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
@@ -60,7 +60,7 @@ function addHub() {
 document.getElementById("buttonAddUser").onclick = function() {addUser()};
 var inputAddUser = document.getElementById("inputAddUser")
 
-function addUser() {
+async function addUser() {
   if (inputAddUser.value == "0x"){
   	inputAddUser.value = '';
   	$("#allertAddUser").html('<div class="alert alert-success alert-dismissible fade show" id="allertUser" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
@@ -78,6 +78,25 @@ function addUser() {
 //TEST PUBLISH
 document.getElementById("buttonTestPublish").onclick = function() {testPublish()};
 var inputTestPublish = document.getElementById("inputTestPublish")
+document.getElementById('inputTestDocumentID').addEventListener('change', handleFileSelect);
+
+function handleFileSelect(evt) {
+    //var files = evt.target.files; // FileList object
+    // Loop through the FileList and render image files as thumbnails.
+    const file = document.getElementById('inputTestDocumentID').files[0];
+	var reader = new FileReader();
+    let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
+	shaObj.update(reader.readAsArrayBuffer(file));
+	let documentHash = "0x" + shaObj.getHash("HEX");
+	console.log(documentHash);
+
+	try {
+		$("#hashTestDocumentID").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>'+documentHash+'</div>');
+
+	} catch (error) {
+		document.getElementById("hashTestDocumentID").innerHTML = error;
+	}
+}
 
 async function uploadDocument() {
 	console.log($('#inputDocumentID')[0]);
@@ -85,7 +104,7 @@ async function uploadDocument() {
     	let fileReader = new FileReader();
     	fileReader.onload = function() {
     		let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
-			shaObj.update(fileReader.readAsArrayBuffer());
+			shaObj.update(fileReader.readAsArrayBuffer( ));
 			let documentHash = "0x" + shaObj.getHash("HEX");
             console.log(documentHash);
         }
@@ -93,9 +112,9 @@ async function uploadDocument() {
 }
 
 
-function testPublish() {
+async function testPublish() {
   if (inputTestPublish.value == "0x"){
-  	uploadDocument();
+  	//uploadDocument();
   	inputTestPublish.value = '';
   	$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" id="allertTest" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
   	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
