@@ -1,138 +1,217 @@
-
 console.log("HELLO");
 
 
-$('document').ready(function(){
+$('document').ready(function () {
 
-//ADD MINESTRY
-document.getElementById("buttonAddressMinestry").onclick = function() {addMinestry()};
-var inputAddressMinestry = document.getElementById("inputAddressMinestry")
+	//ADD MINESTRY
+	document.getElementById("buttonAddressMinestry").onclick = function () { addMinestry() };
+	var inputAddressMinestry = document.getElementById("inputAddressMinestry")
 
-async function addMinestry() {
-  if (inputAddressMinestry.value == "0x"){
-  	inputAddressMinestry.value = '';
-  	$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-  	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-  	setTimeout(function() {$("#allertMinestry").remove();}, 10000);
-  }
-  else{
-  	inputAddressMinestry.value = '';
-  	$("#allertAddMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-  	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-  	setTimeout(function() {$("#allertMinestry").remove();}, 10000);
-  }
-}
-//ADD HUB
-document.getElementById("buttonAddressHub").onclick = function() {addHub()};
-var inputAddressHub = document.getElementById("inputAddressHub")
-
-async function addHub() {
-  if (inputAddressHub.value == "0x"){
-  	inputAddressHub.value = '';
-  	$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allertHub" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-  	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-  	setTimeout(function() {$("#allertHub").remove();}, 10000);
-  }
-  else{
-  	inputAddressHub.value = '';
-  	$("#allertAddHub").html('<div class="alert alert-danger alert-dismissible fade show" id="allertHub" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-  	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-  	setTimeout(function() {$("#allertHub").remove();}, 10000);
-  }
-}
-
-//ADD USER
-var hashDocumentID_user;
-document.getElementById('inputUserAddress').addEventListener('change', hashFileIDUser, false);
-async function hashFileIDUser(evt) {
-    const file = document.getElementById('inputUserAddress').files[0];
-	var reader = new FileReader();
-    let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
-	shaObj.update(reader.readAsArrayBuffer(file));
-	hashDocumentID_user = "0x" + shaObj.getHash("HEX");
-	console.log(hashDocumentID_user);
-	try {
-		$("#hashDocumentIDUser").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>'+hashDocumentID_user+'</div>');
-	} catch (error) {
-		$("#hashDocumentIDUser").html('<div class="alert alert-primary" role="alert">'+error+'</div>');
+	async function addMinestry() {
+		if (inputAddressMinestry.value == "0x") {
+			inputAddressMinestry.value = '';
+			$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
+			setTimeout(function () { $("#allertMinestry").remove(); }, 10000);
+		}
+		else {
+			inputAddressMinestry.value = '';
+			$("#allertAddMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
+			setTimeout(function () { $("#allertMinestry").remove(); }, 10000);
+		}
 	}
-}
+	//ADD HUB
+	document.getElementById("buttonAddressHub").onclick = function () { addHub() };
+	var inputAddressHub = document.getElementById("inputAddressHub")
 
-document.getElementById("buttonAddUser").onclick = function() {addUser()};
-var inputAddUser = document.getElementById("inputAddUser")
-
-async function addUser() {
-  if (inputAddUser.value == "0x"){
-  	inputAddUser.value = '';
-  	console.log("ID "+hashDocumentID_user);
-  	$("#allertAddUser").html('<div class="alert alert-success alert-dismissible fade show" id="allertUser" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-  	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-  	setTimeout(function() {$("#allertUser").remove();}, 10000);
-  }
-  else{
-  	inputAddUser.value = '';
-  	$("#allertAddUser").html('<div class="alert alert-danger alert-dismissible fade show" id="allertUser" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-  	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-  	setTimeout(function() {$("#allertUser").remove();}, 10000);
-  }
-}
-
-//TEST PUBLISH
-var hashDocumentID_testP;
-var hashDocument_testP;
-var positivity_testP;
-document.getElementById('inputTestDocumentID').addEventListener('change', hashFileID, false);
-async function hashFileID(evt) {
-    const file = document.getElementById('inputTestDocumentID').files[0];
-	var reader = new FileReader();
-    let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
-	shaObj.update(reader.readAsArrayBuffer(file));
-	hashDocumentID_testP = "0x" + shaObj.getHash("HEX");
-	console.log(hashDocumentID_testP);
-	try {
-		$("#hashTestDocumentID").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>'+hashDocumentID_testP+'</div>');
-	} catch (error) {
-		$("#hashTestDocumentID").html('<div class="alert alert-primary" role="alert">'+error+'</div>');
+	async function addHub() {
+		if (inputAddressHub.value == "0x") {
+			inputAddressHub.value = '';
+			$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allertHub" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
+			setTimeout(function () { $("#allertHub").remove(); }, 10000);
+		}
+		else {
+			inputAddressHub.value = '';
+			$("#allertAddHub").html('<div class="alert alert-danger alert-dismissible fade show" id="allertHub" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
+			setTimeout(function () { $("#allertHub").remove(); }, 10000);
+		}
 	}
-}
 
-document.getElementById('inputDocumentTest').addEventListener('change', hashFile, false);
-async function hashFile(evt) {
-    const file = document.getElementById('inputTestDocumentID').files[0];
-	var reader = new FileReader();
-    let  shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
-	shaObj.update(reader.readAsArrayBuffer(file));
-	hashDocument_testP = "0x" + shaObj.getHash("HEX");
-	console.log(hashDocument_testP);
-	try {
-		$("#hashTestDocument").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>'+hashDocument_testP+'</div>');
-	} catch (error) {
-		$("#hashTestDocument").html('<div class="alert alert-primary" role="alert">'+error+'</div>');
+	//ADD USER
+	var hashDocumentID_user;
+	document.getElementById('documentUploadButton').addEventListener('click', hashFileIDUser);
+	async function hashFileIDUser() {
+		let name = $('#inputDocumentIDUser')[0].name
+		if ($('#inputDocumentIDUser')[0].files.length == 0) {
+			return showError("Insert file");
+		}
+		var reader = new FileReader();
+		reader.onload = function () {
+			let shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
+			shaObj.update(reader.result);
+			hashDocumentID_user = "0x" + shaObj.getHash("HEX");
+			console.log(hashDocumentID_user);
+			try {
+				$("#hashDocumentIDUser").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>' + hashDocumentID_user + '</div>');
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		reader.readAsArrayBuffer($('#inputDocumentIDUser')[0].files[0]);
 	}
-}
 
-document.getElementById("buttonTestPublish").onclick = function() {testPublish()};
-var inputTestPublish = document.getElementById("inputTestPublish")
-async function testPublish() {
-  if (inputTestPublish.value == "0x"){
-  	//uploadDocument();
-  	inputTestPublish.value = '';
-  	console.log("ID "+hashDocumentID_testP);
-  	console.log("TEst "+hashDocument_testP);
-  	//selector
-  	positivity = document.getElementById("inputPosivity").value;
-	console.log(positivity);
-  	$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" id="allertTest" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-  	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-  	setTimeout(function() {$("#allertTest").remove();}, 10000);
-  }
-  else{
-  	inputTestPublish.value = '';
-  	$("#allertTestPublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allertTest" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-  	// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-  	setTimeout(function() {$("#allertTest").remove();}, 10000);
-  }
-}
+	document.getElementById("buttonAddUser").addEventListener('click', addUser);
+	var inputAddUser = document.getElementById("inputAddUser")
+
+	async function addUser() {
+		if (inputAddUser.value == "0x") {
+			inputAddUser.value = '';
+			console.log("ID " + hashDocumentID_user);
+			$("#allertAddUser").html('<div class="alert alert-success alert-dismissible fade show" id="allertUser" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allertUser").remove(); }, 10000);
+		}
+		else {
+			inputAddUser.value = '';
+			$("#allertAddUser").html('<div class="alert alert-danger alert-dismissible fade show" id="allertUser" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allertUser").remove(); }, 10000);
+		}
+	}
+
+	//TEST PUBLISH
+	let hashDocumentID_testP;
+	let hashDocument_testP;
+	let positivity_testP;
+	document.getElementById('butUploadDocIDTest').addEventListener('click', hashFileIDTest);
+	async function hashFileIDTest() {
+		if ($('#inputTestDocumentID')[0].files.length == 0) {
+			return console.log("Insert file");
+		}
+		var reader = new FileReader();
+		reader.onload = function () {
+			let shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
+			shaObj.update(reader.result);
+			hashDocumentID_testP = "0x" + shaObj.getHash("HEX");
+			console.log("ID  " + hashDocumentID_testP);
+			try {
+				$("#hashDocumentIDTest").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><strong>Hash document is: </strong>' + hashDocumentID_testP + '</div>');
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		reader.readAsArrayBuffer($('#inputTestDocumentID')[0].files[0]);
+
+	}
+
+	document.getElementById('butUploadDocTest').addEventListener('click', hashFileTest);
+	async function hashFileTest() {
+		if ($('#inputTestDocument')[0].files.length == 0) {
+			return showError("Insert file");
+		}
+		var reader = new FileReader();
+		reader.onload = function () {
+			let shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
+			shaObj.update(reader.result);
+			hashDocument_testP = "0x" + shaObj.getHash("HEX");
+			console.log("TEST  " + hashDocument_testP);
+			try {
+				$("#hashDocumentTest").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><strong>Hash document is: </strong>' + hashDocument_testP + '</div>');
+			} catch (error) {
+				console.log(error)
+			}
+		}
+		reader.readAsArrayBuffer($('#inputTestDocument')[0].files[0]);
+
+	}
+
+	document.getElementById("buttonTestPublish").onclick = function () { testPublish() };
+	var inputTestPublish = document.getElementById("inputTestPublish")
+	async function testPublish() {
+		if (inputTestPublish.value == "0x") {
+			inputTestPublish.value = '';
+			console.log("ID " + hashDocumentID_testP);
+			console.log("TEst " + hashDocument_testP);
+			//selector
+			positivity = document.getElementById("inputPosivity").value;
+			console.log(positivity);
+			$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" id="allertTest" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			$("#inputPosivity").get(0).selectedIndex = 0;
+			setTimeout(function () { $("#allertTest").remove(); }, 10000);
+		}
+		else {
+			inputTestPublish.value = '';
+			$("#allertTestPublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allertTest" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">   </button></div></div>');
+			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
+			setTimeout(function () { $("#allertTest").remove(); }, 10000);
+
+		}
+	}
+
+
+	//VACCINE PUBLISH
+	var hashDocumentID_vaccineP;
+	var hashDocument_vaccineP;
+	document.getElementById('butUploadDocIDVaccine').addEventListener('click', hashFileIDVaccine);
+	async function hashFileIDVaccine(evt) {
+		if ($('#inputDocumentIDVaccine')[0].files.length == 0) {
+			return console.log("Insert file");
+		}
+		var reader = new FileReader();
+		reader.onload = function () {
+			let shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
+			shaObj.update(reader.result);
+			hashDocumentID_vaccineP = "0x" + shaObj.getHash("HEX");
+			console.log(hashDocumentID_vaccineP);
+			try {
+				$("#hashDocumentIDVaccine").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>' + hashDocumentID_vaccineP + '</div>');
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		reader.readAsArrayBuffer($('#inputDocumentIDVaccine')[0].files[0]);
+	}
+
+	document.getElementById('butUploadDocVaccine').addEventListener('click', hashFileVaccine);
+	async function hashFileVaccine() {
+		if ($('#inputDocumentVaccine')[0].files.length == 0) {
+			return console.log("Insert file");
+		}
+		var reader = new FileReader();
+		reader.onload = function () {
+
+			let shaObj = new jsSHA("SHA-256", "ARRAYBUFFER");
+			shaObj.update(reader.result);
+			hashDocument_vaccineP = "0x" + shaObj.getHash("HEX");
+			console.log(hashDocument_vaccineP);
+			try {
+				$("#hashDocumentVaccine").html('<div class="alert alert-primary" role="alert"><strong>Hash document is: </strong>' + hashDocument_vaccineP + '</div>');
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		reader.readAsArrayBuffer($('#inputDocumentVaccine')[0].files[0]);
+
+	}
+
+	document.getElementById("buttonVaccinePublish").onclick = function () { vaccinePublish() };
+	var inputAddressUserVaccine = document.getElementById("inputAddressUserVaccine")
+	async function vaccinePublish() {
+		if (inputAddressUserVaccine.value == "0x") {
+			inputAddressUserVaccine.value = '';
+			console.log("ID " + hashDocumentID_vaccineP);
+			console.log("TEst " + hashDocument_vaccineP);
+			$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show" id="allertVaccine" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
+		}
+		else {
+			inputAddressUserVaccine.value = '';
+			$("#allertVaccinePublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
+		}
+	}
+
 
 
 });
