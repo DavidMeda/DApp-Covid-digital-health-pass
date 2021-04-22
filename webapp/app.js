@@ -1,40 +1,95 @@
 console.log("HELLO");
+var account;
+var contract_address = "0x94D79c7D6407a1dCDe7528668aDf222dbd9fbe15";
+var web3;
+var contract;
+
+
+function getAccounts(callback) {
+	window.web3.eth.getAccounts((error, result) => {
+		if (error) {
+			console.log(error);
+		} else {
+			callback(result);
+		}
+	});
+}
+
+window.addEventListener('load', init);
+async function init() {
+	// Checking if Web3 has been injected by the browser (Mist/MetaMask)
+	if (typeof web3 !== 'undefined') {
+		// Use Mist/MetaMask's provider
+		web3 = new Web3(window.ethereum);
+	} else {
+		console.log('Injected web3 Not Found!!!')
+		// fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+		web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+
+		var provider = document.getElementById('provider_url').value;
+		window.web3 = new Web3(new Web3.providers.HttpProvider(provider));
+	}
+
+	if (window.ethereum) {
+		try {
+			await ethereum.enable();
+		} catch (err) {
+			allert("Access to your Ethereum account rejected." + error);
+		}
+	}
+	$('#AddressAccount').html('<strong>Your addres is :' + ethereum.selectedAddress + '</strong>');
+
+	contract = new web3.eth.Contract(CovidABI, contract_address);
+};
 
 
 $('document').ready(function () {
+
 
 	//ADD MINESTRY
 	document.getElementById("buttonAddressMinestry").addEventListener('click', addMinestry);
 	var inputAddressMinestry = document.getElementById("inputAddressMinestry")
 
 	async function addMinestry() {
-		if (inputAddressMinestry.value == "0x") {
+		if (inputAddressMinestry.value.startsWith("0x")) {
+
+			console.log("MyAddress: " + ethereum.selectedAddress);
+			console.log("Minestri address: " + inputAddressMinestry.value);
+			contract.methods.addMinestry(inputAddressMinestry.value).send({ from: ethereum.selectedAddress }, (error, result) => {
+				if (error) { console.log(error) }
+				else {
+					console.log("RESULT: " + result);
+					$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction executed!</strong>\nID transaction: ' + result + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+				}
+			});
 			inputAddressMinestry.value = '';
-			$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-			//setTimeout(function () { $("#allertMinestry").remove(); }, 10000);
 		}
 		else {
 			inputAddressMinestry.value = '';
-			$("#allertAddMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-			//setTimeout(function () { $("#allertMinestry").remove(); }, 10000);
+			$("#allertAddMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allertMinestry" role="alert">Address MINESTRY must start with \'0x\'<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allertMinestry").remove(); }, 10000);
 		}
 	}
 	//ADD HUB
-	document.getElementById("buttonAddressHub").addEventListener('click',addHub);
+	document.getElementById("buttonAddressHub").addEventListener('click', addHub);
 	var inputAddressHub = document.getElementById("inputAddressHub")
 
 	async function addHub() {
-		if (inputAddressHub.value == "0x") {
+		if (inputAddressHub.value.startsWith("0x")) {
+			console.log("MyAddress: " + ethereum.selectedAddress);
+			console.log("Hub address: " + inputAddressMinestry.value);
+			contract.methods.addHub(inputAddressHub.value).send({ from: ethereum.selectedAddress }, (error, result) => {
+				if (error) { console.log(error) }
+				else {
+					console.log("RESULT: " + result);
+					$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction executed!</strong>\nID transaction: ' + result + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+				}
+			});
 			inputAddressHub.value = '';
-			$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allertHub" role="alert"><strong>Transaction executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-			//setTimeout(function () { $("#allertHub").remove(); }, 10000);
 		}
 		else {
 			inputAddressHub.value = '';
-			$("#allertAddHub").html('<div class="alert alert-danger alert-dismissible fade show" id="allertHub" role="alert"><strong>Transaction NOT executed!</strong> blablalbs.  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			$("#allertAddHub").html('<div class="alert alert-danger alert-dismissible fade show" id="allertHub" role="alert">Address HUB must start with \'0x\'<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
 			//setTimeout(function () { $("#allertHub").remove(); }, 10000);
 		}
@@ -126,7 +181,7 @@ $('document').ready(function () {
 
 	}
 
-	document.getElementById("buttonTestPublish").addEventListener('click',testPublish);
+	document.getElementById("buttonTestPublish").addEventListener('click', testPublish);
 	var inputTestPublish = document.getElementById("inputTestPublish")
 	async function testPublish() {
 		if (inputTestPublish.value == "0x") {
@@ -208,7 +263,7 @@ $('document').ready(function () {
 		else {
 			inputAddressUserVaccine.value = '';
 			const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
-			$("#allertVaccinePublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><strong>Transaction NOT executed!</strong> '+stringa+'  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			$("#allertVaccinePublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><strong>Transaction NOT executed!</strong> ' + stringa + '  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
 		}
 	}
@@ -258,7 +313,7 @@ $('document').ready(function () {
 
 	}
 
-	document.getElementById("buttonTestVerification").addEventListener('click',testPublishVer);
+	document.getElementById("buttonTestVerification").addEventListener('click', testPublishVer);
 	var inputTestVerification = document.getElementById("inputTestVerification")
 	async function testPublishVer() {
 		if (inputTestVerification.value == "0x") {

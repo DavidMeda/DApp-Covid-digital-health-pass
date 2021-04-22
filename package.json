@@ -1,29 +1,19 @@
 {
-  "name": "project",
+  "name": "covid_certificate",
   "version": "1.0.0",
   "description": "",
-  "main": "truffle-config.js",
+  "main": "truffle.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "dev": "lite-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DavidMeda/DApp---Ethereum-Covid-certificate.git"
-  },
-  "author": "Davide_Medaglia",
+  "author": "Davide Medaglia",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/DavidMeda/DApp---Ethereum-Covid-certificate/issues"
-  },
-  "homepage": "https://github.com/DavidMeda/DApp---Ethereum-Covid-certificate#readme",
   "dependencies": {
-    "@openzeppelin/contracts": "^4.0.0",
-    "command-line-args": "^5.1.1",
-    "jquery": "^3.6.0",
-    "jssha": "^3.2.0",
+    "lite-server": "^2.6.1",
     "web3": "^1.3.5"
   }
 }

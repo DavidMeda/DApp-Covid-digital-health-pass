@@ -31,6 +31,8 @@ contract Covid is Ownable {
     event newMinestry(address indexed ministryAddress, address indexed from, uint time);
     event newUser(address indexed userAddress, bytes32 hashID, uint time, bool result);
     
+
+    //aggoungere messaggio a require
     modifier onlyMinestry() {
         require(ministries[msg.sender] ==true);
         _;
