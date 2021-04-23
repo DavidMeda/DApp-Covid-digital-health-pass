@@ -12,7 +12,7 @@ contract("Covid Test", (accounts) =>{
 		assert.equal(minestryResult.logs[0].args.ministryAddress, minestry);
 	})
 
-	it("shouldn't be able to add minestry from anyway isn't owner",async() =>{
+	it("shouldn't be able to add minestry from anyway isn't owner of contract",async() =>{
 		const covidInstance = await covid_contract.deployed();
         await utils.shouldThrow(covidInstance.addMinestry(hub, {from: minestry}));
 	})
@@ -35,21 +35,6 @@ contract("Covid Test", (accounts) =>{
 		  return hash;
 	}
 
-	it("should be able to add user from yourself",async() =>{
-		const covidInstance = await covid_contract.deployed();
-		const hash = calculateHashBytes("DOCUMENT_ID");
-		const userResult = await covidInstance.addUser(hash, user1, {from: user1});
-		assert.equal(userResult.logs[0].args.userAddress, user1);  
-		assert.equal(userResult.logs[0].args.hashID, hash);
-		     
-	})
-
-	it("shouldn't be possible add user from another user", async()=>{
-		const covidInstance = await covid_contract.deployed();
-		const hash = calculateHashBytes("DOCUMENT_ID");
-        await utils.shouldThrow(covidInstance.addUser(hash, user1, {from: user2}));
-	})
-
 	it("should be approve vacine of user only from hub", async()=>{
 		const covidInstance = await covid_contract.deployed();
 		const hash_ID = calculateHashBytes("DOCUMENT_ID");
@@ -57,27 +42,28 @@ contract("Covid Test", (accounts) =>{
 		const vaccineResult = await covidInstance.approveVaccine(hash_ID, hash_Vaccine, user1, {from: hub});
 		assert.equal(vaccineResult.logs[0].args.user, user1); 
 		assert.equal(vaccineResult.logs[0].args.from, hub);
-		assert.equal(vaccineResult.logs[0].args.result, true);  
+		assert.equal(vaccineResult.logs[0].args.hashCertificate, hash_Vaccine);  
 	})
 
 
-	it("shouldn't be approve vacine if user don't correspond to document", async()=>{
+	it("shouldn't be approve vacine if user is already vaccinated", async()=>{
 		const covidInstance = await covid_contract.deployed();
 		const hash_ID = calculateHashBytes("DOCUMENT_ID");
 		const hash_Vaccine = calculateHashBytes("VACCINE");
-		const vaccineResult = await covidInstance.approveVaccine(hash_ID, hash_Vaccine, user2, {from: hub});
+		await utils.shouldThrow( covidInstance.approveVaccine(hash_ID, hash_Vaccine, user1, {from: hub}));
+		/*
 		assert.equal(vaccineResult.logs[0].args.user, user2); 
 		assert.equal(vaccineResult.logs[0].args.from, hub);
 		assert.equal(vaccineResult.logs[0].args.result, false);  
+		*/
 	})
 
-	it("should be approve vacine of user only from hub", async()=>{
+	it("shouldn't be approve vacine of user from anyway isn't hub", async()=>{
 		const covidInstance = await covid_contract.deployed();
 		const hash_ID = calculateHashBytes("DOCUMENT_ID");
 		const hash_Vaccine = calculateHashBytes("VACCINE");
 		await utils.shouldThrow(covidInstance.approveVaccine(hash_ID, hash_Vaccine, user1, {from: user1}));
 	})
-
 
 	it("should be approve test of user only from hub", async()=>{
 		const covidInstance = await covid_contract.deployed();
@@ -86,33 +72,10 @@ contract("Covid Test", (accounts) =>{
 		const testResult = await covidInstance.approveTest(hash_ID, hash_Test, true, user1, {from: hub});
 		assert.equal(testResult.logs[0].args.user, user1); 
 		assert.equal(testResult.logs[0].args.from, hub);
-		assert.equal(testResult.logs[0].args.result, true);  
 		assert.equal(testResult.logs[0].args.positivity, true);  
 	})
 
-
-	it("should be approve test of user only from hub", async()=>{
-		const covidInstance = await covid_contract.deployed();
-		const hash_ID = calculateHashBytes("DOCUMENT_ID");
-		const hash_Test = calculateHashBytes("TEST");
-		const testResult = await covidInstance.approveTest(hash_ID, hash_Test, false, user1, {from: hub});
-		assert.equal(testResult.logs[0].args.user, user1); 
-		assert.equal(testResult.logs[0].args.from, hub);
-		assert.equal(testResult.logs[0].args.result, true);  
-		assert.equal(testResult.logs[0].args.positivity, false);  
-	})
-
-	it("shouldn't be approve test if user don't correspond to document", async()=>{
-		const covidInstance = await covid_contract.deployed();
-		const hash_ID = calculateHashBytes("DOCUMENT_ID");
-		const hash_Test = calculateHashBytes("TEST");
-		const testResult = await covidInstance.approveTest(hash_ID, hash_Test, true, user2, {from: hub});
-		assert.equal(testResult.logs[0].args.user, user2); 
-		assert.equal(testResult.logs[0].args.from, hub);
-		assert.equal(testResult.logs[0].args.result, false);  
-	})
-
-	it("should be approve test of user only from hub", async()=>{
+	it("shouldn't be approve test of user from anyway isn't hub", async()=>{
 		const covidInstance = await covid_contract.deployed();
 		const hash_ID = calculateHashBytes("DOCUMENT_ID");
 		const hash_Vaccine = calculateHashBytes("TEST");
@@ -143,7 +106,7 @@ contract("Covid Test", (accounts) =>{
 		const hash_Test = calculateHashBytes("TEST");
 		const testResult = await covidInstance.verificationTest(hash_ID, hash_Test, user1);
 		assert.equal(testResult[0], true);
-		assert.equal(testResult[2], false); //the last test pubblish is false (negative)
+		assert.equal(testResult[2], true); //the last test pubblish is false (negative)
 	})
 
 	it("verification FAKE test", async() =>{

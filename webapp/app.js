@@ -1,6 +1,6 @@
 console.log("HELLO");
 var account;
-var contract_address = "0x94D79c7D6407a1dCDe7528668aDf222dbd9fbe15";
+var contract_address = "0x4485B3A70c19938447A0DfD0547DF2282bc95493";
 var web3;
 var contract;
 
@@ -24,7 +24,7 @@ async function init() {
 	} else {
 		console.log('Injected web3 Not Found!!!')
 		// fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-		web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+		web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 
 		var provider = document.getElementById('provider_url').value;
 		window.web3 = new Web3(new Web3.providers.HttpProvider(provider));
@@ -59,7 +59,7 @@ $('document').ready(function () {
 				if (error) { console.log(error) }
 				else {
 					console.log("RESULT: " + result);
-					$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction executed!</strong>\nID transaction: ' + result + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+					$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"style="overflow:hidden; word-wrap:break-word;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 				}
 			});
 			inputAddressMinestry.value = '';
@@ -77,14 +77,19 @@ $('document').ready(function () {
 	async function addHub() {
 		if (inputAddressHub.value.startsWith("0x")) {
 			console.log("MyAddress: " + ethereum.selectedAddress);
-			console.log("Hub address: " + inputAddressMinestry.value);
+			console.log("Hub address: " + inputAddressHub.value);
+			/*
 			contract.methods.addHub(inputAddressHub.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log(error) }
 				else {
 					console.log("RESULT: " + result);
-					$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><strong>Transaction executed!</strong>\nID transaction: ' + result + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+					$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert style="overflow:hidden; word-wrap:break-word;""><strong>Transaction executed!</strong>\nID transaction: ' + result + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 				}
 			});
+			*/
+			const result = '0x398da999afbef4892a62141ba76998efdf18db4fe561d7024c763e9c477d0225';
+			$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert style="overflow:hidden; word-wrap:break-word;white-space: nowrap;text-overflow: ellipsis;""><strong>Transaction executed!</strong>\nID transaction: <br>' + result + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+
 			inputAddressHub.value = '';
 		}
 		else {
@@ -94,7 +99,7 @@ $('document').ready(function () {
 			//setTimeout(function () { $("#allertHub").remove(); }, 10000);
 		}
 	}
-
+	/* 
 	//ADD USER
 	var hashDocumentID_user;
 	document.getElementById('documentUploadButton').addEventListener('click', hashFileIDUser);
@@ -134,7 +139,7 @@ $('document').ready(function () {
 			//setTimeout(function () { $("#allertUser").remove(); }, 10000);
 		}
 	}
-
+*/
 	//TEST PUBLISH
 	let hashDocumentID_testP;
 	let hashDocument_testP;
