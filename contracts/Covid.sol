@@ -27,10 +27,8 @@ contract Covid is Ownable {
     event testPublish(address indexed user, address indexed from, bytes32 hashTest, uint time, bool positivity);
     event vaccinoPublish(address indexed user, address indexed from, bytes32 hashCertificate, uint time);
     event newHub(address indexed hubAddress, address indexed from, uint time);
-    event newMinestry(address indexed ministryAddress, address indexed from, uint time);
-    event newUser(address indexed userAddress, bytes32 hashID, uint time, bool result);
+    event newMinestry(address indexed minestryAddress, address indexed from, uint time);
     
-
     modifier onlyMinestry() {
         require(ministries[msg.sender] ==true, "Only Minestry can add new Hub");
         _;

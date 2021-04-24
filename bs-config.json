@@ -1,7 +1,7 @@
 {
 	"port":7585,
   "server": {
-    "baseDir": ["./webapp", "./build/contracts"]
-  },
-  "ui":{"port":8000}
+    "baseDir": "./webapp", 
+    "routes": { "/": "./" }
+  }  
 }

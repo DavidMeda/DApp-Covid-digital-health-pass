@@ -1,8 +1,20 @@
 console.log("HELLO");
-var contract_address = "0x4485B3A70c19938447A0DfD0547DF2282bc95493";
+//var contract_address = "0x4485B3A70c19938447A0DfD0547DF2282bc95493";
 var web3;
 var contract;
 
+function timeConverter(UNIX_timestamp) {
+	var a = new Date(UNIX_timestamp * 1000);
+	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	var year = a.getFullYear();
+	var month = months[a.getMonth()];
+	var date = a.getDate();
+	var hour = a.getHours();
+	var min = a.getMinutes();
+	var sec = a.getSeconds();
+	var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+	return time;
+}
 
 
 window.addEventListener('load', init);
@@ -16,8 +28,8 @@ async function init() {
 		// fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
 		web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 
-		var provider = document.getElementById('provider_url').value;
-		window.web3 = new Web3(new Web3.providers.HttpProvider(provider));
+		// var provider = document.getElementById('provider_url').value;
+		// window.web3 = new Web3(new Web3.providers.HttpProvider(provider));
 	}
 
 	if (window.ethereum) {
@@ -29,8 +41,18 @@ async function init() {
 	}
 	$('#AddressAccount').html('<strong>Your addres is :' + ethereum.selectedAddress + '</strong>');
 
-	contract = new web3.eth.Contract(CovidABI, contract_address);
-};
+	const MyContract = await $.getJSON("/build/contracts/Covid.json");
+	const networkId = await web3.eth.net.getId();
+	const deployedNetwork = MyContract.networks[networkId];
+	contract = new web3.eth.Contract(
+		MyContract.abi,
+		deployedNetwork && deployedNetwork.address,
+	);
+
+
+
+
+}
 
 
 $('document').ready(function () {
@@ -49,15 +71,26 @@ $('document').ready(function () {
 				if (error) { console.log(error) }
 				else {
 					console.log("RESULT: " + result);
-					$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+					contract.events.newMinestry()
+						.on('data', (event) => {
+							console.log(event);
+							const blockNumber = event["blockNumber"];
+							const from = event["returnValues"]["from"];
+							const newMinestry = event["returnValues"]["ministryAddress"];
+							const time = timeConverter(event["returnValues"]["time"]);
+							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time+'<strong><br>From address: </strong>' + from + '<strong><br>Minestry address: </strong>' + newMinestry;
+							$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						}).on('error', console.error);
+					inputAddressMinestry.value = '';
 				}
+
 			});
-			inputAddressMinestry.value = '';
+
 		}
 		else {
-			inputAddressMinestry.value = '';
+			//inputAddressMinestry.value = '';
 			$("#allertAddMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allertMinestry" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address MINESTRY must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			setTimeout(function () { $("#allertMinestry").remove(); }, 10000);
+			//setTimeout(function () { $("#allertMinestry").remove(); }, 10000);
 		}
 	}
 	//ADD HUB
@@ -73,14 +106,24 @@ $('document').ready(function () {
 				if (error) { console.log(error) }
 				else {
 					console.log("RESULT: " + result);
-					$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+					contract.events.newHub()
+						.on('data', (event) => {
+							console.log(event);
+							const blockNumber = event["blockNumber"];
+							const from = event["returnValues"]["from"];
+							const hubAddress = event["returnValues"]["hubAddress"];
+							const time = timeConverter(event["returnValues"]["time"]);
+							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber +'<br><strong>Mined at: </strong>' + time+ '<br><strong>From address: </strong>' + from + '<br><strong>Minestry address: </strong>' + hubAddress ;
+							$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							inputAddressHub.value = '';
+						}).on('error', console.error);
 				}
 			});
 
 			//const result = '0x398da999afbef4892a62141ba76998efdf18db4fe561d7024c763e9c477d0225';
-			//$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allertMinestry" role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			//$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show"  role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 
-			inputAddressHub.value = '';
+
 		}
 		else {
 			inputAddressHub.value = '';
@@ -347,10 +390,9 @@ $('document').ready(function () {
 					console.log("RESULT: " + result[1]);
 					console.log("RESULT: " + result[2]);
 					if (result[0]) {
-						$("#allertTestVer").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>FIND TEST RESULT!</strong><br>Time block executed: ' + result[1] + '<br> Result positivity test: ' + result[2] + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertTestVer").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>FIND TEST RESULT!</strong><br>Date and time block executed: ' + timeConverter(result[1]) + '<br> Result positivity test: ' + result[2] + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 					} else {
 						$("#allertTestVer").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>NO TEST FIND!</strong><br>' + result[0] + '  ' + result[1] + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-
 					}
 				}
 			});
@@ -365,7 +407,7 @@ $('document').ready(function () {
 			console.log("boolDocIDTestV set " + boolDocIDTestV);
 			console.log("TEST  set " + boolDocTestV);
 			//setTimeout(function () { $("#allertVerification").remove(); }, 10000);
-			//inputTestVerification.value = '';
+			inputTestVerification.value = '';
 		}
 		else {
 			const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
@@ -445,7 +487,7 @@ $('document').ready(function () {
 					console.log("RESULT: " + result[0]);
 					console.log("RESULT: " + result[1]);
 					if (result[0]) {
-						$("#allertVaccineVerification").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>VACCINE CERTIFICATE FIND!</strong><br>Time block mined: ' + result[1] + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertVaccineVerification").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>VACCINE CERTIFICATE FIND!</strong><br>Date and time block mined: ' + timeConverter(result[1]) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 					} else {
 						$("#allertVaccineVerification").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>NO VACCINE CERTIFICATE FIND!</strong><br></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 					}
