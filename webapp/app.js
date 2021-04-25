@@ -78,7 +78,7 @@ $('document').ready(function () {
 							const from = event["returnValues"]["from"];
 							const newMinestry = event["returnValues"]["ministryAddress"];
 							const time = timeConverter(event["returnValues"]["time"]);
-							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time+'<strong><br>From address: </strong>' + from + '<strong><br>Minestry address: </strong>' + newMinestry;
+							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Minestry address: </strong>' + newMinestry;
 							$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 						}).on('error', console.error);
 					inputAddressMinestry.value = '';
@@ -113,7 +113,7 @@ $('document').ready(function () {
 							const from = event["returnValues"]["from"];
 							const hubAddress = event["returnValues"]["hubAddress"];
 							const time = timeConverter(event["returnValues"]["time"]);
-							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber +'<br><strong>Mined at: </strong>' + time+ '<br><strong>From address: </strong>' + from + '<br><strong>Minestry address: </strong>' + hubAddress ;
+							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Minestry address: </strong>' + hubAddress;
 							$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 							inputAddressHub.value = '';
 						}).on('error', console.error);
@@ -198,19 +198,32 @@ $('document').ready(function () {
 			console.log("address " + inputTestPublish);
 
 			contract.methods.approveTest(hashDocumentID_testP, hashDocument_testP, positivity, inputTestPublish.value).send({ from: ethereum.selectedAddress }, (error, result) => {
-				if (error) { console.log(error) }
+				if (error) { console.log("FAIL: "+error) }
 				else {
 					console.log("RESULT: " + result);
-					$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+					contract.events.testPublish().on('data', (event) => {
+						console.log(event);
+						const blockNumber = event["blockNumber"];
+						const from = event["returnValues"]["from"];
+						const user = event["returnValues"]["user"];
+						const time = timeConverter(event["returnValues"]["time"]);
+						let positivityResult;
+						if(event["returnValues"]["positivity"]){  positivityResult = 'POSITIVE'}
+						else { positivityResult = 'NEGATIVE'};
+						const hashDocument = event["returnValues"]["hashTest"];
+						const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From Hub address: </strong>' + from + '<br><strong>User address: </strong>' + user + '<br><strong>Result test: </strong>'+ positivityResult + '<br><strong>Hash document test: </strong>' +hashDocument;
+						$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						
+						inputTestPublish.value = '';
+						$("#inputPosivity").get(0).selectedIndex = 0;
+					}).on('error', console.error);
 				}
 			});
 
 			//prova
 			//var result = 'dspunfvsdpoivnwoivfewhvnourvnoiranfvdfjbindfboijreajbvmeràoinboreijb';
 			//$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			$("#inputPosivity").get(0).selectedIndex = 0;
 			positivity = '';
-			inputTestPublish.value = '';
 			boolDocIDTestP = false;
 			boolDocTestP = false;
 			console.log("boolDocTestP: " + boolDocTestP)
@@ -294,7 +307,18 @@ $('document').ready(function () {
 				if (error) { console.log(error) }
 				else {
 					console.log("RESULT: " + result);
-					$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+					contract.events.vaccinoPublish().on('data', (event) => {
+						console.log(event);
+						const blockNumber = event["blockNumber"];
+						const from = event["returnValues"]["from"];
+						const user = event["returnValues"]["user"];
+						const time = timeConverter(event["returnValues"]["time"]);
+						const hashDocument = event["returnValues"]["hashCertificate"];
+						const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From Hub address: </strong>' + from + '<br><strong>User address: </strong>' + user + '<br><strong>Hash document test: </strong>' +hashDocument;
+						$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						inputAddressUserVaccine.value = '';
+					}).on('error', console.error);
+					//$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 				}
 			});
 
@@ -307,14 +331,14 @@ $('document').ready(function () {
 			boolDocIDVaccineP = false;
 			console.log("boolDocVaccineP set " + boolDocVaccineP);
 			console.log("boolDocIDVaccineP set" + boolDocIDVaccineP);
-			inputAddressUserVaccine.value = '';
+			//inputAddressUserVaccine.value = '';
 			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
 		}
 		else {
 			//prova
-			const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
-			$("#allertVaccinePublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><strong>Transaction NOT executed!</strong> ' + stringa + '  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			inputAddressUserVaccine.value = '';
+			//const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
+			$("#allertVaccinePublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Some errore in input</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			//inputAddressUserVaccine.value = '';
 			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
 		}
 	}
@@ -389,11 +413,15 @@ $('document').ready(function () {
 					console.log("RESULT: " + result[0]);
 					console.log("RESULT: " + result[1]);
 					console.log("RESULT: " + result[2]);
+					let resultPositivity;
+					if(result[2]){resultPositivity = "POSITIVE";}
+					else{resultPositivity = "NEGATIVE";}
 					if (result[0]) {
-						$("#allertTestVer").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>FIND TEST RESULT!</strong><br>Date and time block executed: ' + timeConverter(result[1]) + '<br> Result positivity test: ' + result[2] + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertTestVer").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>TEST RESULT FIND!</strong><br><strong>Time block mined: </strong>' + timeConverter(result[1]) + '<br> <strong>Result test: </strong>' + resultPositivity + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 					} else {
 						$("#allertTestVer").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>NO TEST FIND!</strong><br>' + result[0] + '  ' + result[1] + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 					}
+					inputTestVerification.value = '';
 				}
 			});
 
@@ -407,12 +435,12 @@ $('document').ready(function () {
 			console.log("boolDocIDTestV set " + boolDocIDTestV);
 			console.log("TEST  set " + boolDocTestV);
 			//setTimeout(function () { $("#allertVerification").remove(); }, 10000);
-			inputTestVerification.value = '';
+			
 		}
 		else {
-			const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
-			$("#allertTestVer").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><strong>ERROR INPUT!</strong> ' + stringa + '  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			inputTestVerification.value = '';
+			//const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
+			$("#allertTestVer").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><strong>ERROR!</strong><br>Some errore in input<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			//inputTestVerification.value = '';
 			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
 			//setTimeout(function () { $("#allertVerification").remove(); }, 10000);
 
@@ -487,10 +515,11 @@ $('document').ready(function () {
 					console.log("RESULT: " + result[0]);
 					console.log("RESULT: " + result[1]);
 					if (result[0]) {
-						$("#allertVaccineVerification").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>VACCINE CERTIFICATE FIND!</strong><br>Date and time block mined: ' + timeConverter(result[1]) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertVaccineVerification").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>VACCINE CERTIFICATE FIND!</strong><br><strong>Time block mined: </strong>' + timeConverter(result[1]) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 					} else {
 						$("#allertVaccineVerification").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>NO VACCINE CERTIFICATE FIND!</strong><br></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 					}
+					inputAddressUserVaccineVer.value = '';
 				}
 			});
 
@@ -503,11 +532,11 @@ $('document').ready(function () {
 			console.log("ID set " + boolDocVaccineV);
 			console.log("TEst set " + boolDocIDVaccineV);
 			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
-			inputAddressUserVaccineVer.value = '';
+			
 		}
 		else {
-			const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
-			$("#allertVaccineVerification").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>ERROR INPUT! executed!</strong> ' + stringa + '  <button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			//const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
+			$("#allertVaccineVerification").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>ERROR!</strong><br>Some errore in input<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 
 			//inputAddressUserVaccineVer.value = '';
 			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);

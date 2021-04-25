@@ -25,7 +25,7 @@ contract Covid is Ownable {
     mapping (address => mapping(bytes32 => Test)) private  user_test;        //map: map: address user-> map(hash DocumentID => Test)
     
     event testPublish(address indexed user, address indexed from, bytes32 hashTest, uint time, bool positivity);
-    event vaccinoPublish(address indexed user, address indexed from, bytes32 hashCertificate, uint time);
+    event vaccinePublish(address indexed user, address indexed from, bytes32 hashCertificate, uint time);
     event newHub(address indexed hubAddress, address indexed from, uint time);
     event newMinestry(address indexed minestryAddress, address indexed from, uint time);
     
@@ -59,7 +59,7 @@ contract Covid is Ownable {
         require(user_vaccine[_userAddress][_hashID].time == 0,"Vaccine is already submit for this user");
             uint time = block.timestamp;
             user_vaccine[_userAddress][_hashID] = Vaccine(_hashCertificate, time);
-            emit vaccinoPublish(_userAddress, msg.sender, _hashCertificate, time);
+            emit vaccinePublish(_userAddress, msg.sender, _hashCertificate, time);
     }
 
     //@return bool result: true if user and document hash correspond
