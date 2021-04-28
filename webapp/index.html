@@ -13,6 +13,8 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
       crossorigin="anonymous"></script>
+   <!--script src="/node_modules/buffer/index.js"></script-->
+   <script src="/node_modules/ipfs-http-client/dist/index.min.js"></script>
    <script src="/node_modules/jssha/dist/sha256.js"></script>
    <script src="/node_modules/web3/dist/web3.min.js"></script>
 
@@ -107,12 +109,12 @@
                               <form>
                                  <div class="form-group" style="margin-right: -30px;">
                                     <input type="file" class="form-control-file" id="inputTestDocumentID"
-                                       style="padding-top: 6px; text-leaf:brwse">
+                                       style="padding-top: 6px;">
                                  </div>
                               </form>
                            </div>
                            <div class="col-5" style="align-items: center;justify-content: center;margin-right:-60px;">
-                              <input type="button" id="butUploadDocIDTest" value="Submit">
+                              <input type="button" id="butUploadDocIDTest" value="Submit & Publish">
                            </div>
                         </div>
                      </div>
@@ -131,7 +133,7 @@
                               </form>
                            </div>
                            <div class="col-5" style="align-items: center;justify-content: center;margin-right:-60px;">
-                              <input type="button" id="butUploadDocTest" value="Submit">
+                              <input type="button" id="butUploadDocTest" value="Submit & Publish">
                            </div>
                         </div>
                      </div>
@@ -181,7 +183,7 @@
                               </form>
                            </div>
                            <div class="col-5" style="align-items: center;justify-content: center;margin-right:-60px;">
-                              <input type="button" id="butUploadDocIDVaccine" value="Submit">
+                              <input type="button" id="butUploadDocIDVaccine" value="Submit & Publish">
                            </div>
                         </div>
                      </div>
@@ -201,7 +203,7 @@
                               </form>
                            </div>
                            <div class="col-5" style="align-items: center;justify-content: center;margin-right:-60px;">
-                              <input type="button" id="butUploadDocVaccine" value="Submit">
+                              <input type="button" id="butUploadDocVaccine" value="Submit & Publish">
                            </div>
                         </div>
                      </div>
