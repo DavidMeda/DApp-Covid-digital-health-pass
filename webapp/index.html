@@ -235,9 +235,13 @@
                   <p>***Some text to add***</p>
                   <div class="row-6">
                      <div class="input-group mb-3" style="overflow:hidden; word-wrap:break-word;">
-                        <label for="inputTestVerDocumentID">1. Choose file document ID input</label>
+                        <label for="inputTestVerDocumentID">1. Choose submit file document ID or download it</label>
                         <div class="container">
                            <div class="row">
+                              <div class="form-check">
+                                 <input class="form-check-input" type="radio" name="Radio" id="radioTest1"
+                                    value="option1" aria-label="..." checked>
+                              </div>
                               <div class="col">
                                  <form>
                                     <div class="form-group" style="margin-right: -30px;">
@@ -251,14 +255,36 @@
                                  <input type="button" id="butUploadDocIDTestVer" value="Submit">
                               </div>
                            </div>
+                           <div class="row">
+                              <div class="form-check">
+                                 <input class="form-check-input" name="Radio" value="option2" type="radio"
+                                    id="radioTest2" aria-label="..." style="vertical-align: baseline">
+                              </div>
+                              <div class="col">
+                                 <label>Insert CID of IPFS:</label>
+                                 <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="CID"
+                                       aria-label="Recipient's hub" aria-describedby="basic-addon2"
+                                       id="URLDocumentIDTest" disabled>
+                                    <div class="input-group-append">
+                                       <button class="btn btn-primary" type="button" id="butURLDocumentIDTest"
+                                          disabled>Download</button>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
                         </div>
                         <div id="hashDocumentIDTestVer" display="inline" style="overflow:hidden; word-wrap:break-word;">
                         </div>
                      </div>
                      <div class="input-group mb-3" style="overflow:hidden; word-wrap:break-word;">
-                        <label for="inputTestVerDocument">2. Choose file TEST result</label>
+                        <label for="inputTestVerDocument">2. Choose submit file TEST or download it result</label>
                         <div class="container">
                            <div class="row">
+                              <div class="form-check">
+                                 <input class="form-check-input" type="radio" name="Radio1" id="radioTest3"
+                                    value="option3" aria-label="..." checked>
+                              </div>
                               <div class="col">
                                  <form>
                                     <div class="form-group" style="margin-right: -30px;">
@@ -272,6 +298,28 @@
                                  <input type="button" id="butUploadDocTestVer" value="Submit">
                               </div>
                            </div>
+
+                           <div class="row">
+                              <div class="form-check" style="vertical-align: middle">
+                                 <input class="form-check-input" name="Radio1" value="option4" type="radio"
+                                    id="radioTest4" aria-label="...">
+                              </div>
+                              <div class="col">
+                                 <label>Insert CID of IPFS:</label>
+                                 <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="CID"
+                                       aria-label="Recipient's hub" aria-describedby="basic-addon2" id="URLDocumentTest"
+                                       disabled>
+                                    <div class="input-group-append">
+                                       <button class="btn btn-primary" type="button" id="butURLDocumentTest"
+                                          disabled>Download</button>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+
+
                         </div>
                         <div id="hashDocumentTestVer" display="inline" style="overflow:hidden; word-wrap:break-word;">
                         </div>
@@ -295,9 +343,13 @@
                   <p>***Some text to add***</p>
                   <div class="row-6">
                      <div class="input-group mb-3" style="overflow:hidden; word-wrap:break-word;">
-                        <label for="inputDocumentIDVaccineVer">1. Choose file document ID input</label>
+                        <label for="inputDocumentIDVaccineVer">1. Choose file document ID or download it</label>
                         <div class="container">
                            <div class="row">
+                              <div class="form-check">
+                                 <input class="form-check-input" type="radio" name="Radio3" id="radioVaccine1"
+                                    value="option1" aria-label="..." checked>
+                              </div>
                               <div class="col">
                                  <form>
                                     <div class="form-group" style="margin-right: -30px;">
@@ -311,6 +363,25 @@
                                  <input type="button" id="butUploadDocIDVaccineVer" value="Submit">
                               </div>
                            </div>
+
+                           <div class="row">
+                              <div class="form-check">
+                                 <input class="form-check-input" name="Radio3" value="option2" type="radio"
+                                    id="radioVaccine2" aria-label="..." style="vertical-align: baseline">
+                              </div>
+                              <div class="col">
+                                 <label>Insert CID of IPFS:</label>
+                                 <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="CID"
+                                       aria-label="Recipient's hub" aria-describedby="basic-addon2"
+                                       id="URLDocumentIDVaccine" disabled>
+                                    <div class="input-group-append">
+                                       <button class="btn btn-primary" type="button" id="butURLDocumentIDVaccine"
+                                          disabled>Download</button>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
                         </div>
                         <div id="hashDocumentIDVaccineVer" display="inline"
                            style="overflow:hidden; word-wrap:break-word;">
@@ -320,6 +391,10 @@
                         <label for="inputDocumentVaccineVer">1. Choose file document ID input</label>
                         <div class="container">
                            <div class="row">
+                              <div class="form-check">
+                                 <input class="form-check-input" type="radio" name="Radio4" id="radioVaccine3"
+                                    value="option1" aria-label="..." checked>
+                              </div>
                               <div class="col">
                                  <form>
                                     <div class="form-group" style="margin-right: -30px;">
@@ -331,6 +406,24 @@
                               <div class="col-5"
                                  style="align-items: center;justify-content: center;margin-right:-60px;">
                                  <input type="button" id="butUploadDocVaccineVer" value="Submit">
+                              </div>
+                           </div>
+                           <div class="row">
+                              <div class="form-check">
+                                 <input class="form-check-input" name="Radio4" value="option2" type="radio"
+                                    id="radioVaccine4" aria-label="..." style="vertical-align: baseline">
+                              </div>
+                              <div class="col">
+                                 <label>Insert CID of IPFS:</label>
+                                 <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="CID"
+                                       aria-label="Recipient's hub" aria-describedby="basic-addon2"
+                                       id="URLDocumentVaccine" disabled>
+                                    <div class="input-group-append">
+                                       <button class="btn btn-primary" type="button" id="butURLDocumentVaccine"
+                                          disabled>Download</button>
+                                    </div>
+                                 </div>
                               </div>
                            </div>
                         </div>

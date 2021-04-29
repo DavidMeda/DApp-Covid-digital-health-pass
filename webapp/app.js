@@ -377,20 +377,26 @@ $('document').ready(function () {
 	let hashDocument_testV;
 	let boolDocIDTestV = false;
 	let boolDocTestV = false;
+
+	document.getElementById('radioTest2').addEventListener('click', () => {
+
+		document.getElementById('butUploadDocIDTestVer').disabled = true;
+		document.getElementById('inputTestVerDocumentID').disabled = true;
+		document.getElementById('URLDocumentIDTest').disabled = false;
+		document.getElementById('butURLDocumentIDTest').disabled = false;
+	});
+
+	document.getElementById('radioTest1').addEventListener('click', () => {
+
+		document.getElementById('butUploadDocIDTestVer').disabled = false;
+		document.getElementById('inputTestVerDocumentID').disabled = false;
+		document.getElementById('URLDocumentIDTest').disabled = true;
+		document.getElementById('butURLDocumentIDTest').disabled = true;
+	});
+
 	document.getElementById('butUploadDocIDTestVer').addEventListener('click', async () => {
 		if ($('#inputTestVerDocumentID')[0].files.length == 0) {
-			//return console.log("Insert file");
-			const cid = "QmTSnEbJZYoDcaYxQW5P8sgb74Wt1BsRMJPKPerYwzCJSe";
-			var reader = new FileReader();
-			reader.onload = async function () {
-				const chunks = []
-				for await (const chunk of ipfs.cat(cid)) {
-					chunks.push(chunk)
-				}
-				console.log(reader.result);
-			}
-			reader.AsBinaryString(chunks);
-
+			return console.log("Insert file");
 		}
 		else {
 			var reader = new FileReader();
@@ -408,6 +414,64 @@ $('document').ready(function () {
 			reader.readAsArrayBuffer($('#inputTestVerDocumentID')[0].files[0]);
 		}
 	});
+
+	document.getElementById('butURLDocumentIDTest').addEventListener('click', async () => {
+		const chunks = []
+		for await (const chunk of ipfs.cat(URLDocumentIDTest.value)) {
+			chunks.push(chunk)
+		}
+		console.log(chunks);
+
+		hashDocumentID_testV = calculateHash(chunks[0]);
+		console.log("ID  " + hashDocumentID_testV);
+		boolDocIDTestV = true;
+		console.log("boolDocIDTestV " + boolDocIDTestV);
+		try {
+			const link = "https://ipfs.io/ipfs/" + URLDocumentIDTest.value;
+			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_testV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
+			$("#hashDocumentIDTestVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			URLDocumentIDTest.value = '';
+		} catch (error) {
+			console.log(error);
+		}
+	});
+
+	document.getElementById('radioTest4').addEventListener('click', () => {
+
+		document.getElementById('butUploadDocTestVer').disabled = true;
+		document.getElementById('inputTestVerDocument').disabled = true;
+		document.getElementById('URLDocumentTest').disabled = false;
+		document.getElementById('butURLDocumentTest').disabled = false;
+	});
+
+	document.getElementById('radioTest3').addEventListener('click', () => {
+		document.getElementById('butUploadDocTestVer').disabled = false;
+		document.getElementById('inputTestVerDocument').disabled = false;
+		document.getElementById('URLDocumentTest').disabled = true;
+		document.getElementById('butURLDocumentTest').disabled = true;
+	});
+
+	document.getElementById('butURLDocumentTest').addEventListener('click', async () => {
+		const chunks = []
+		for await (const chunk of ipfs.cat(URLDocumentTest.value)) {
+			chunks.push(chunk)
+		}
+		console.log(chunks);
+
+		hashDocument_testV = calculateHash(chunks[0]);
+		console.log("ID  " + hashDocument_testV);
+		boolDocTestV = true;
+		console.log("boolDocTestV " + boolDocTestV);
+		try {
+			const link = "https://ipfs.io/ipfs/" + URLDocumentTest.value;
+			const inner = '<strong>Hash document is: </strong>' + hashDocument_testV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
+			$("#hashDocumentTestVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			URLDocumentTest.value = '';
+		} catch (error) {
+			console.log(error);
+		}
+	});
+
 
 	document.getElementById('butUploadDocTestVer').addEventListener('click', hashFileTestVer);
 	async function hashFileTestVer() {
@@ -427,7 +491,6 @@ $('document').ready(function () {
 			}
 		}
 		reader.readAsArrayBuffer($('#inputTestVerDocument')[0].files[0]);
-
 	}
 
 	document.getElementById("buttonTestVerification").addEventListener('click', testPublishVer);
@@ -483,11 +546,54 @@ $('document').ready(function () {
 		}
 	}
 
+
+
+
+
 	//VACCINE VERIFICATION
 	var hashDocumentID_vaccineV;
 	var hashDocument_vaccineV;
 	let boolDocIDVaccineV = false;
 	let boolDocVaccineV = false;
+
+	document.getElementById('radioVaccine2').addEventListener('click', () => {
+
+		document.getElementById('butUploadDocIDVaccineVer').disabled = true;
+		document.getElementById('inputDocumentIDVaccineVer').disabled = true;
+		document.getElementById('URLDocumentIDVaccine').disabled = false;
+		document.getElementById('butURLDocumentIDVaccine').disabled = false;
+	});
+
+	document.getElementById('radioVaccine1').addEventListener('click', () => {
+
+		document.getElementById('butUploadDocIDVaccineVer').disabled = false;
+		document.getElementById('inputDocumentIDVaccineVer').disabled = false;
+		document.getElementById('URLDocumentIDVaccine').disabled = true;
+		document.getElementById('butURLDocumentIDVaccine').disabled = true;
+	});
+
+	document.getElementById('butURLDocumentIDVaccine').addEventListener('click', async () => {
+		const chunks = []
+		for await (const chunk of ipfs.cat(URLDocumentIDVaccine.value)) {
+			chunks.push(chunk)
+		}
+		console.log(chunks);
+
+		hashDocumentID_vaccineV = calculateHash(chunks[0]);
+		console.log("ID  " + hashDocumentID_vaccineV);
+		boolDocIDVaccineV = true;
+		console.log("boolDocTestV " + boolDocIDVaccineV);
+		try {
+			const link = "https://ipfs.io/ipfs/" + URLDocumentIDVaccine.value;
+			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_vaccineV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
+			$("#hashDocumentIDVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			URLDocumentIDVaccine.value = '';
+		} catch (error) {
+			console.log(error);
+		}
+	});
+
+
 	document.getElementById('butUploadDocIDVaccineVer').addEventListener('click', hashFileIDVaccineVer);
 	async function hashFileIDVaccineVer() {
 		if ($('#inputDocumentIDVaccineVer')[0].files.length == 0) {
@@ -507,6 +613,44 @@ $('document').ready(function () {
 		}
 		reader.readAsArrayBuffer($('#inputDocumentIDVaccineVer')[0].files[0]);
 	}
+
+
+	document.getElementById('radioVaccine4').addEventListener('click', () => {
+
+		document.getElementById('butUploadDocVaccineVer').disabled = true;
+		document.getElementById('inputDocumentVaccineVer').disabled = true;
+		document.getElementById('URLDocumentVaccine').disabled = false;
+		document.getElementById('butURLDocumentVaccine').disabled = false;
+	});
+
+	document.getElementById('radioVaccine3').addEventListener('click', () => {
+
+		document.getElementById('butUploadDocVaccineVer').disabled = false;
+		document.getElementById('inputDocumentVaccineVer').disabled = false;
+		document.getElementById('URLDocumentVaccine').disabled = true;
+		document.getElementById('butURLDocumentVaccine').disabled = true;
+	});
+
+	document.getElementById('butURLDocumentVaccine').addEventListener('click', async () => {
+		const chunks = []
+		for await (const chunk of ipfs.cat(URLDocumentVaccine.value)) {
+			chunks.push(chunk)
+		}
+		console.log(chunks);
+
+		hashDocument_vaccineV = calculateHash(chunks[0]);
+		console.log("ID  " + hashDocument_vaccineV);
+		boolDocVaccineV = true;
+		console.log("boolDocTestV " + boolDocVaccineV);
+		try {
+			const link = "https://ipfs.io/ipfs/" + URLDocumentVaccine.value;
+			const inner = '<strong>Hash document is: </strong>' + hashDocument_vaccineV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
+			$("#hashDocumentVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			URLDocumentVaccine.value = '';
+		} catch (error) {
+			console.log(error);
+		}
+	});
 
 	document.getElementById('butUploadDocVaccineVer').addEventListener('click', hashFileVaccineVer);
 	async function hashFileVaccineVer() {
