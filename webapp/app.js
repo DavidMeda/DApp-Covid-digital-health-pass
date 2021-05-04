@@ -56,7 +56,7 @@ async function init() {
 			allert("Access to your Ethereum account rejected." + error);
 		}
 	}
-	$('#AddressAccount').html('<strong>Your addres is :' + ethereum.selectedAddress + '</strong>');
+	$('#AddressAccount').html('<strong>Your addres is: ' + ethereum.selectedAddress + '</strong>');
 
 	const MyContract = await $.getJSON("/build/contracts/Covid.json");
 	const networkId = await web3.eth.net.getId();
@@ -159,27 +159,27 @@ $('document').ready(function () {
 	let boolDocTestP = false;
 	document.getElementById('butUploadDocIDTest').addEventListener('click', async () => {
 		if ($('#inputTestDocumentID')[0].files.length == 0) {
-			return showError("No file inserted");
+			$("#hashDocumentIDTest").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>ERROR!<br>NO file added </strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			return console.log("No file added");
 		}
 		let nameFile = $('#inputTestDocumentID')[0].files[0].name;
 		var reader = new FileReader();
 		reader.onload = async function () {
 
-			const res = await sendIpfs(reader.result);
-			console.log(res["path"]);
+			// const res = await sendIpfs(reader.result);
+			// console.log(res["path"]);
 
 			hashDocumentID_testP = calculateHash(reader.result);
 			console.log("ID  " + hashDocumentID_testP);
 
 			boolDocIDTestP = true;
 			console.log("boolDocIDTestP: " + boolDocIDTestP);
-			try {
-				const link = "https://ipfs.io/ipfs/" + res["path"];
-				const inner = '<strong>Hash document is: </strong>' + hashDocumentID_testP + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
-				$("#hashDocumentIDTest").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			} catch (error) {
-				console.log(error);
-			}
+
+			// const link = "https://ipfs.io/ipfs/" + res["path"];
+			// const linkHtml = '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>'
+			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_testP;
+			$("#hashDocumentIDTest").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+
 		}
 		reader.readAsArrayBuffer($('#inputTestDocumentID')[0].files[0]);
 
@@ -188,25 +188,30 @@ $('document').ready(function () {
 
 	document.getElementById('butUploadDocTest').addEventListener('click', async () => {
 		if ($('#inputTestDocument')[0].files.length == 0) {
-			return showError("No file inserted");
+			$("#hashDocumentTest").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>ERROR!<br>NO file added </strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			return console.log("No file added");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
-
-			const res = await sendIpfs(reader.result);
-			console.log(res["path"]);
+			let path;
+			if (document.getElementById('ipfsTest').checked) {
+				const res = await sendIpfs(reader.result);
+				path = res["path"];
+				console.log(res["path"]);
+			}
 
 			hashDocument_testP = calculateHash(reader.result);
 			boolDocTestP = true;
 			console.log("boolDocTestP: " + boolDocTestP);
 			console.log("TEST  " + hashDocument_testP);
-			try {
-				const link = "https://ipfs.io/ipfs/" + res["path"];
-				const inner = '<strong>Hash document is: </strong>' + hashDocument_testP + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
-				$("#hashDocumentTest").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			} catch (error) {
-				console.log(error)
+
+			let inner = '<strong>Hash document is: </strong>' + hashDocument_testP;
+			if (document.getElementById('ipfsTest').checked == true) {
+				const link = "https://ipfs.io/ipfs/" + path;
+				inner = inner + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
+				document.getElementById('ipfsTest').checked = false;
 			}
+			$("#hashDocumentTest").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 		}
 		reader.readAsArrayBuffer($('#inputTestDocument')[0].files[0]);
 
@@ -274,36 +279,39 @@ $('document').ready(function () {
 	let boolDocVaccineP = false;
 	document.getElementById('butUploadDocIDVaccine').addEventListener('click', async () => {
 		if ($('#inputDocumentIDVaccine')[0].files.length == 0) {
-			return showError("No file inserted");
+			$("#hashDocumentIDVaccine").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p><strong>ERROR!</strong><br>NO file added </p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			return console.log("No file inserted");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
-			const res = await sendIpfs(reader.result);
-			console.log(res["path"]);
+			// const res = await sendIpfs(reader.result);
+			// console.log(res["path"]);
 
 			hashDocumentID_vaccineP = calculateHash(reader.result);
 			console.log(hashDocumentID_vaccineP);
 			boolDocIDVaccineP = true;
 			console.log("boolDocIDVaccineP " + boolDocIDVaccineP);
-			try {
-				const link = "https://ipfs.io/ipfs/" + res["path"];
-				const inner = '<strong>Hash document is: </strong>' + hashDocumentID_vaccineP + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
-				$("#hashDocumentIDVaccine").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			} catch (error) {
-				console.log(error);
-			}
+			// const link = "https://ipfs.io/ipfs/" + res["path"];
+			// const linkHtml = + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
+			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_vaccineP;
+			$("#hashDocumentIDVaccine").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 		}
 		reader.readAsArrayBuffer($('#inputDocumentIDVaccine')[0].files[0]);
 	});
 
 	document.getElementById('butUploadDocVaccine').addEventListener('click', async () => {
 		if ($('#inputDocumentVaccine')[0].files.length == 0) {
+			$("#hashDocumentVaccine").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p><strong>ERROR!</strong><br>NO file added </p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			return console.log("Insert file");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
-			const res = await sendIpfs(reader.result);
-			console.log(res["path"]);
+			let path;
+			if (document.getElementById('ipfsVaccine').checked) {
+				const res = await sendIpfs(reader.result);
+				path = res["path"];
+				console.log(res["path"]);
+			}
 
 			hashDocument_vaccineP = calculateHash(reader.result);
 			console.log(hashDocument_vaccineP);
@@ -311,13 +319,14 @@ $('document').ready(function () {
 			console.log("boolDocVaccineP " + boolDocVaccineP);
 			console.log("boolDocIDVaccineP " + boolDocIDVaccineP);
 
-			try {
-				const link = "https://ipfs.io/ipfs/" + res["path"];
-				const inner = '<strong>Hash document is: </strong>' + hashDocument_vaccineP + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
-				$("#hashDocumentVaccine").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			} catch (error) {
-				console.log(error);
+			let inner = '<strong>Hash document is: </strong>' + hashDocument_vaccineP;
+
+			if (document.getElementById('ipfsVaccine').checked == true) {
+				const link = "https://ipfs.io/ipfs/" + path;
+				inner = inner + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
+				document.getElementById('ipfsVaccine').checked = false;
 			}
+			$("#hashDocumentVaccine").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 		}
 		reader.readAsArrayBuffer($('#inputDocumentVaccine')[0].files[0]);
 	});
@@ -378,21 +387,6 @@ $('document').ready(function () {
 	let boolDocIDTestV = false;
 	let boolDocTestV = false;
 
-	document.getElementById('radioTest2').addEventListener('click', () => {
-
-		document.getElementById('butUploadDocIDTestVer').disabled = true;
-		document.getElementById('inputTestVerDocumentID').disabled = true;
-		document.getElementById('URLDocumentIDTest').disabled = false;
-		document.getElementById('butURLDocumentIDTest').disabled = false;
-	});
-
-	document.getElementById('radioTest1').addEventListener('click', () => {
-
-		document.getElementById('butUploadDocIDTestVer').disabled = false;
-		document.getElementById('inputTestVerDocumentID').disabled = false;
-		document.getElementById('URLDocumentIDTest').disabled = true;
-		document.getElementById('butURLDocumentIDTest').disabled = true;
-	});
 
 	document.getElementById('butUploadDocIDTestVer').addEventListener('click', async () => {
 		if ($('#inputTestVerDocumentID')[0].files.length == 0) {
@@ -405,34 +399,9 @@ $('document').ready(function () {
 				console.log("ID  " + hashDocumentID_testV);
 				boolDocIDTestV = true;
 				console.log("boolDocIDTestV " + boolDocIDTestV);
-				try {
-					$("#hashDocumentIDTestVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocumentID_testV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-				} catch (error) {
-					console.log(error);
-				}
+				$("#hashDocumentIDTestVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocumentID_testV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			}
 			reader.readAsArrayBuffer($('#inputTestVerDocumentID')[0].files[0]);
-		}
-	});
-
-	document.getElementById('butURLDocumentIDTest').addEventListener('click', async () => {
-		const chunks = []
-		for await (const chunk of ipfs.cat(URLDocumentIDTest.value)) {
-			chunks.push(chunk)
-		}
-		console.log(chunks);
-
-		hashDocumentID_testV = calculateHash(chunks[0]);
-		console.log("ID  " + hashDocumentID_testV);
-		boolDocIDTestV = true;
-		console.log("boolDocIDTestV " + boolDocIDTestV);
-		try {
-			const link = "https://ipfs.io/ipfs/" + URLDocumentIDTest.value;
-			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_testV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
-			$("#hashDocumentIDTestVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			URLDocumentIDTest.value = '';
-		} catch (error) {
-			console.log(error);
 		}
 	});
 
@@ -476,7 +445,7 @@ $('document').ready(function () {
 	document.getElementById('butUploadDocTestVer').addEventListener('click', hashFileTestVer);
 	async function hashFileTestVer() {
 		if ($('#inputTestVerDocument')[0].files.length == 0) {
-			return showError("Insert file");
+			return console.log("Insert file");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
@@ -555,43 +524,6 @@ $('document').ready(function () {
 	var hashDocument_vaccineV;
 	let boolDocIDVaccineV = false;
 	let boolDocVaccineV = false;
-
-	document.getElementById('radioVaccine2').addEventListener('click', () => {
-
-		document.getElementById('butUploadDocIDVaccineVer').disabled = true;
-		document.getElementById('inputDocumentIDVaccineVer').disabled = true;
-		document.getElementById('URLDocumentIDVaccine').disabled = false;
-		document.getElementById('butURLDocumentIDVaccine').disabled = false;
-	});
-
-	document.getElementById('radioVaccine1').addEventListener('click', () => {
-
-		document.getElementById('butUploadDocIDVaccineVer').disabled = false;
-		document.getElementById('inputDocumentIDVaccineVer').disabled = false;
-		document.getElementById('URLDocumentIDVaccine').disabled = true;
-		document.getElementById('butURLDocumentIDVaccine').disabled = true;
-	});
-
-	document.getElementById('butURLDocumentIDVaccine').addEventListener('click', async () => {
-		const chunks = []
-		for await (const chunk of ipfs.cat(URLDocumentIDVaccine.value)) {
-			chunks.push(chunk)
-		}
-		console.log(chunks);
-
-		hashDocumentID_vaccineV = calculateHash(chunks[0]);
-		console.log("ID  " + hashDocumentID_vaccineV);
-		boolDocIDVaccineV = true;
-		console.log("boolDocTestV " + boolDocIDVaccineV);
-		try {
-			const link = "https://ipfs.io/ipfs/" + URLDocumentIDVaccine.value;
-			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_vaccineV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
-			$("#hashDocumentIDVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			URLDocumentIDVaccine.value = '';
-		} catch (error) {
-			console.log(error);
-		}
-	});
 
 
 	document.getElementById('butUploadDocIDVaccineVer').addEventListener('click', hashFileIDVaccineVer);
