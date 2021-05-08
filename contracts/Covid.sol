@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity  >=0.8.0;
+pragma solidity  ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 ///@title contract for covid healthy documentation passport
@@ -28,9 +28,11 @@ contract Covid is Ownable {
     event vaccinePublish(address indexed user, address indexed from, bytes32 hashCertificate, uint time);
     event newHub(address indexed hubAddress, address indexed from, uint time);
     event newMinestry(address indexed minestryAddress, address indexed from, uint time);
+    event deletedHub(address indexed hubAddres, address indexed from, uint time);
+    event deletedMinestry(address indexed minestryAddres, address indexed from, uint time);
     
     modifier onlyMinestry() {
-        require(ministries[msg.sender] ==true, "Only Minestry can add new Hub");
+        require(ministries[msg.sender]==true, "Only Minestry can add new Hub");
         _;
     }
     
@@ -43,10 +45,20 @@ contract Covid is Ownable {
         ministries[_ministryAddress] = true;
         emit newMinestry(_ministryAddress, msg.sender, block.timestamp);
     }    
+
+    function removeMinestry(address _ministryAddress) public onlyOwner{
+        ministries[_ministryAddress] = false;
+        emit deletedMinestry(_ministryAddress, msg.sender, block.timestamp);
+    }    
     
     function addHub(address _hubAddress) public onlyMinestry{
         hubs[_hubAddress] = true;
         emit newHub(_hubAddress, msg.sender, block.timestamp);
+    }
+
+    function removeHub(address _hubAddress) public onlyMinestry{
+        hubs[_hubAddress] = false;
+        emit deletedHub(_hubAddress, msg.sender, block.timestamp);
     }
     
     function approveTest(bytes32 _hashID, bytes32 _hashTest, bool _positivity,  address _userAddress) public onlyHub{

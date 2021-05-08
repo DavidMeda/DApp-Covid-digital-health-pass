@@ -1,4 +1,3 @@
-//var contract_address = "0x4485B3A70c19938447A0DfD0547DF2282bc95493";
 var web3;
 var contract;
 var ipfs;
@@ -56,7 +55,7 @@ async function init() {
 			allert("Access to your Ethereum account rejected." + error);
 		}
 	}
-	$('#AddressAccount').html('<strong>Your addres is: ' + ethereum.selectedAddress + '</strong>');
+
 
 	const MyContract = await $.getJSON("/build/contracts/Covid.json");
 	const networkId = await web3.eth.net.getId();
@@ -66,7 +65,8 @@ async function init() {
 		deployedNetwork && deployedNetwork.address,
 	);
 
-
+	$('#AddressContract').html('<strong>Contract deployed at address: ' + deployedNetwork.address + '</strong>');
+	$('#AddressAccount').html('<strong>Your address is: ' + ethereum.selectedAddress + '</strong>');
 	ipfs = new IpfsHttpClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
 
 }
@@ -74,12 +74,9 @@ async function init() {
 
 $('document').ready(function () {
 
-
-
-
 	//ADD MINESTRY
 	document.getElementById("buttonAddressMinestry").addEventListener('click', addMinestry);
-	var inputAddressMinestry = document.getElementById("inputAddressMinestry")
+	const inputAddressMinestry = document.getElementById("inputAddressMinestry")
 
 	async function addMinestry() {
 		if (inputAddressMinestry.value.startsWith("0x")) {
@@ -95,10 +92,12 @@ $('document').ready(function () {
 							console.log(event);
 							const blockNumber = event["blockNumber"];
 							const from = event["returnValues"]["from"];
-							const newMinestry = event["returnValues"]["ministryAddress"];
+							const newMinestry = event["returnValues"]["minestryAddress"];
 							const time = timeConverter(event["returnValues"]["time"]);
 							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Minestry address: </strong>' + newMinestry;
-							$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							setTimeout(function () { $("#allert").remove(); }, 60000);
+
 						}).on('error', console.error);
 					inputAddressMinestry.value = '';
 				}
@@ -107,11 +106,48 @@ $('document').ready(function () {
 
 		}
 		else {
-			//inputAddressMinestry.value = '';
-			$("#allertAddMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allertMinestry" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address MINESTRY must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			//setTimeout(function () { $("#allertMinestry").remove(); }, 10000);
+			$("#allertAddMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address MINESTRY must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 		}
 	}
+
+	//REMOVE MINESTRY
+	document.getElementById("buttonAddressMinestry2").addEventListener('click', removeMinestry);
+	const inputAddressMinestryR = document.getElementById("inputAddressMinestry2")
+
+	async function removeMinestry() {
+		if (inputAddressMinestryR.value.startsWith("0x")) {
+
+			console.log("MyAddress: " + ethereum.selectedAddress);
+			console.log("Minestri address: " + inputAddressMinestryR.value);
+			contract.methods.removeMinestry(inputAddressMinestryR.value).send({ from: ethereum.selectedAddress }, (error, result) => {
+				if (error) { console.log(error) }
+				else {
+					console.log("RESULT: " + result);
+					contract.events.deletedMinestry()
+						.on('data', (event) => {
+							console.log(event);
+							const blockNumber = event["blockNumber"];
+							const from = event["returnValues"]["from"];
+							const newMinestry = event["returnValues"]["minestryAddres"];
+							const time = timeConverter(event["returnValues"]["time"]);
+							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Minestry address: </strong>' + newMinestry;
+							$("#allertRemoveMinestry").html('<div class="alert alert-success alert-dismissible fade show" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							setTimeout(function () { $("#allert").remove(); }, 60000);
+
+						}).on('error', console.error);
+					inputAddressMinestryR.value = '';
+				}
+			});
+		}
+		else {
+			$("#allertRemoveMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address MINESTRY must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
+
+		}
+	}
+
+
 	//ADD HUB
 	document.getElementById("buttonAddressHub").addEventListener('click', addHub);
 	var inputAddressHub = document.getElementById("inputAddressHub")
@@ -133,22 +169,51 @@ $('document').ready(function () {
 							const hubAddress = event["returnValues"]["hubAddress"];
 							const time = timeConverter(event["returnValues"]["time"]);
 							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Minestry address: </strong>' + hubAddress;
-							$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							setTimeout(function () { $("#allert").remove(); }, 60000);
 							inputAddressHub.value = '';
 						}).on('error', console.error);
 				}
 			});
-
-			//const result = '0x398da999afbef4892a62141ba76998efdf18db4fe561d7024c763e9c477d0225';
-			//$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show"  role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-
-
 		}
 		else {
 			inputAddressHub.value = '';
-			$("#allertAddHub").html('<div class="alert alert-danger alert-dismissible fade show" id="allertHub" role="alert><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address HUB must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-			//setTimeout(function () { $("#allertHub").remove(); }, 10000);
+			$("#allertAddHub").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address HUB must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
+		}
+	}
+
+	//REMOVE HUB
+	document.getElementById("buttonAddressHub2").addEventListener('click', removeHub);
+	var inputAddressHubR = document.getElementById("inputAddressHub2")
+
+	async function removeHub() {
+		if (inputAddressHubR.value.startsWith("0x")) {
+			console.log("MyAddress: " + ethereum.selectedAddress);
+			console.log("Hub address: " + inputAddressHubR.value);
+
+			contract.methods.removeHub(inputAddressHubR.value).send({ from: ethereum.selectedAddress }, (error, result) => {
+				if (error) { console.log(error) }
+				else {
+					console.log("RESULT: " + result);
+					contract.events.deletedHub()
+						.on('data', (event) => {
+							console.log(event);
+							const blockNumber = event["blockNumber"];
+							const from = event["returnValues"]["from"];
+							const hubAddress = event["returnValues"]["hubAddres"];
+							const time = timeConverter(event["returnValues"]["time"]);
+							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Minestry address: </strong>' + hubAddress;
+							$("#allertRemoveHub").html('<div class="alert alert-success alert-dismissible fade show" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							inputAddressHubR.value = '';
+							setTimeout(function () { $("#allert").remove(); }, 60000);
+						}).on('error', console.error);
+				}
+			});
+		}
+		else {
+			$("#allertRemoveHub").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address HUB must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 		}
 	}
 
@@ -159,7 +224,8 @@ $('document').ready(function () {
 	let boolDocTestP = false;
 	document.getElementById('butUploadDocIDTest').addEventListener('click', async () => {
 		if ($('#inputTestDocumentID')[0].files.length == 0) {
-			$("#hashDocumentIDTest").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>ERROR!<br>NO file added </strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			$("#hashDocumentIDTest").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!<br>NO file added </strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 			return console.log("No file added");
 		}
 		let nameFile = $('#inputTestDocumentID')[0].files[0].name;
@@ -178,8 +244,8 @@ $('document').ready(function () {
 			// const link = "https://ipfs.io/ipfs/" + res["path"];
 			// const linkHtml = '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>'
 			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_testP;
-			$("#hashDocumentIDTest").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-
+			$("#hashDocumentIDTest").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
 		reader.readAsArrayBuffer($('#inputTestDocumentID')[0].files[0]);
 
@@ -188,7 +254,8 @@ $('document').ready(function () {
 
 	document.getElementById('butUploadDocTest').addEventListener('click', async () => {
 		if ($('#inputTestDocument')[0].files.length == 0) {
-			$("#hashDocumentTest").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>ERROR!<br>NO file added </strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			$("#hashDocumentTest").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!<br>NO file added </strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 			return console.log("No file added");
 		}
 		var reader = new FileReader();
@@ -211,7 +278,8 @@ $('document').ready(function () {
 				inner = inner + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
 				document.getElementById('ipfsTest').checked = false;
 			}
-			$("#hashDocumentTest").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			$("#hashDocumentTest").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
 		reader.readAsArrayBuffer($('#inputTestDocument')[0].files[0]);
 
@@ -244,8 +312,8 @@ $('document').ready(function () {
 						else { positivityResult = 'NEGATIVE' };
 						const hashDocument = event["returnValues"]["hashTest"];
 						const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From Hub address: </strong>' + from + '<br><strong>User address: </strong>' + user + '<br><strong>Result test: </strong>' + positivityResult + '<br><strong>Hash document test: </strong>' + hashDocument;
-						$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-
+						$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						setTimeout(function () { $("#allert").remove(); }, 60000);
 						inputTestPublish.value = '';
 						$("#inputPosivity").get(0).selectedIndex = 0;
 					}).on('error', console.error);
@@ -279,7 +347,8 @@ $('document').ready(function () {
 	let boolDocVaccineP = false;
 	document.getElementById('butUploadDocIDVaccine').addEventListener('click', async () => {
 		if ($('#inputDocumentIDVaccine')[0].files.length == 0) {
-			$("#hashDocumentIDVaccine").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p><strong>ERROR!</strong><br>NO file added </p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			$("#hashDocumentIDVaccine").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p><strong>ERROR!</strong><br>NO file added </p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 			return console.log("No file inserted");
 		}
 		var reader = new FileReader();
@@ -294,14 +363,16 @@ $('document').ready(function () {
 			// const link = "https://ipfs.io/ipfs/" + res["path"];
 			// const linkHtml = + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
 			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_vaccineP;
-			$("#hashDocumentIDVaccine").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			$("#hashDocumentIDVaccine").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
 		reader.readAsArrayBuffer($('#inputDocumentIDVaccine')[0].files[0]);
 	});
 
 	document.getElementById('butUploadDocVaccine').addEventListener('click', async () => {
 		if ($('#inputDocumentVaccine')[0].files.length == 0) {
-			$("#hashDocumentVaccine").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p><strong>ERROR!</strong><br>NO file added </p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			$("#hashDocumentVaccine").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p><strong>ERROR!</strong><br>NO file added </p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 			return console.log("Insert file");
 		}
 		var reader = new FileReader();
@@ -326,7 +397,8 @@ $('document').ready(function () {
 				inner = inner + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
 				document.getElementById('ipfsVaccine').checked = false;
 			}
-			$("#hashDocumentVaccine").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			$("#hashDocumentVaccine").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
 		reader.readAsArrayBuffer($('#inputDocumentVaccine')[0].files[0]);
 	});
@@ -345,7 +417,7 @@ $('document').ready(function () {
 				if (error) { console.log(error) }
 				else {
 					console.log("RESULT: " + result);
-					contract.events.vaccinoPublish().on('data', (event) => {
+					contract.events.vaccinePublish().on('data', (event) => {
 						console.log(event);
 						const blockNumber = event["blockNumber"];
 						const from = event["returnValues"]["from"];
@@ -353,31 +425,21 @@ $('document').ready(function () {
 						const time = timeConverter(event["returnValues"]["time"]);
 						const hashDocument = event["returnValues"]["hashCertificate"];
 						const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From Hub address: </strong>' + from + '<br><strong>User address: </strong>' + user + '<br><strong>Hash document test: </strong>' + hashDocument;
-						$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						setTimeout(function () { $("#allert").remove(); }, 60000);
 						inputAddressUserVaccine.value = '';
 					}).on('error', console.error);
-					//$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 				}
 			});
-
-
-			//prova
-			//var result = 'dspunfvsdpoivnwoivfewhvnourvnoiranfvdfjbindfboijreajbvmeràoinboreijb';
-			//$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Transaction executed!</strong><br>ID transaction: ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 
 			boolDocVaccineP = false;
 			boolDocIDVaccineP = false;
 			console.log("boolDocVaccineP set " + boolDocVaccineP);
 			console.log("boolDocIDVaccineP set" + boolDocIDVaccineP);
-			//inputAddressUserVaccine.value = '';
-			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
 		}
 		else {
-			//prova
-			//const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
-			$("#allertVaccinePublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Some errore in input</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			//inputAddressUserVaccine.value = '';
-			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
+			$("#allertVaccinePublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Some errore in input</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 		}
 	}
 
@@ -399,7 +461,8 @@ $('document').ready(function () {
 				console.log("ID  " + hashDocumentID_testV);
 				boolDocIDTestV = true;
 				console.log("boolDocIDTestV " + boolDocIDTestV);
-				$("#hashDocumentIDTestVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocumentID_testV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+				$("#hashDocumentIDTestVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocumentID_testV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+				setTimeout(function () { $("#allert").remove(); }, 60000);
 			}
 			reader.readAsArrayBuffer($('#inputTestVerDocumentID')[0].files[0]);
 		}
@@ -434,7 +497,8 @@ $('document').ready(function () {
 		try {
 			const link = "https://ipfs.io/ipfs/" + URLDocumentTest.value;
 			const inner = '<strong>Hash document is: </strong>' + hashDocument_testV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
-			$("#hashDocumentTestVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			$("#hashDocumentTestVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 60000);
 			URLDocumentTest.value = '';
 		} catch (error) {
 			console.log(error);
@@ -453,11 +517,8 @@ $('document').ready(function () {
 			console.log("TEST  " + hashDocument_testV);
 			boolDocTestV = true;
 			console.log("boolDocIDTestV " + boolDocIDTestV);
-			try {
-				$("#hashDocumentTestVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocument_testV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			} catch (error) {
-				console.log(error)
-			}
+			$("#hashDocumentTestVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocument_testV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
 		reader.readAsArrayBuffer($('#inputTestVerDocument')[0].files[0]);
 	}
@@ -485,33 +546,24 @@ $('document').ready(function () {
 					if (result[2]) { resultPositivity = "POSITIVE"; }
 					else { resultPositivity = "NEGATIVE"; }
 					if (result[0]) {
-						$("#allertTestVer").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>TEST RESULT FIND!</strong><br><strong>Time block mined: </strong>' + timeConverter(result[1]) + '<br> <strong>Result test: </strong>' + resultPositivity + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertTestVer").html('<div class="alert alert-success alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>TEST RESULT FIND!</strong><br><strong>Time block mined: </strong>' + timeConverter(result[1]) + '<br> <strong>Result test: </strong>' + resultPositivity + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						setTimeout(function () { $("#allert").remove(); }, 60000);
 					} else {
-						$("#allertTestVer").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>NO TEST FIND!</strong><br>' + result[0] + '  ' + result[1] + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertTestVer").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>NO TEST FIND!</strong><br>' + result[0] + '  ' + result[1] + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						setTimeout(function () { $("#allert").remove(); }, 60000);
 					}
 					inputTestVerification.value = '';
 				}
 			});
-
-
-			//prova
-			//var result = 'dspunfvsdpoivnwoivfewhvnourvnoiranfvdfjbindfboijreajbvmeràoinboreijb';
-			//$("#allertTestVer").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>RESULT!</strong><br> ' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-
 			boolDocIDTestV = false;
 			boolDocTestV = false;
 			console.log("boolDocIDTestV set " + boolDocIDTestV);
 			console.log("TEST  set " + boolDocTestV);
-			//setTimeout(function () { $("#allertVerification").remove(); }, 10000);
 
 		}
 		else {
-			//const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
-			$("#allertTestVer").html('<div class="alert alert-danger alert-dismissible fade show" id="allertVaccine" role="alert"><strong>ERROR!</strong><br>Some errore in input<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-			//inputTestVerification.value = '';
-			// this will automatically close the alert and remove this if the users doesnt close it in 5 sec
-			//setTimeout(function () { $("#allertVerification").remove(); }, 10000);
-
+			$("#allertTestVer").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><strong>ERROR!</strong><br>Some errore in input<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 		}
 	}
 
@@ -537,11 +589,8 @@ $('document').ready(function () {
 			console.log(hashDocumentID_vaccineV);
 			boolDocIDVaccineV = true;
 			console.log("boolDocIDVaccineV " + boolDocIDVaccineV);
-			try {
-				$("#hashDocumentIDVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocumentID_vaccineV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			} catch (error) {
-				console.log(error);
-			}
+			$("#hashDocumentIDVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocumentID_vaccineV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
 		reader.readAsArrayBuffer($('#inputDocumentIDVaccineVer')[0].files[0]);
 	}
@@ -574,14 +623,11 @@ $('document').ready(function () {
 		console.log("ID  " + hashDocument_vaccineV);
 		boolDocVaccineV = true;
 		console.log("boolDocTestV " + boolDocVaccineV);
-		try {
-			const link = "https://ipfs.io/ipfs/" + URLDocumentVaccine.value;
-			const inner = '<strong>Hash document is: </strong>' + hashDocument_vaccineV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
-			$("#hashDocumentVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			URLDocumentVaccine.value = '';
-		} catch (error) {
-			console.log(error);
-		}
+		const link = "https://ipfs.io/ipfs/" + URLDocumentVaccine.value;
+		const inner = '<strong>Hash document is: </strong>' + hashDocument_vaccineV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
+		$("#hashDocumentVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+		URLDocumentVaccine.value = '';
+		setTimeout(function () { $("#allert").remove(); }, 60000);
 	});
 
 	document.getElementById('butUploadDocVaccineVer').addEventListener('click', hashFileVaccineVer);
@@ -595,11 +641,8 @@ $('document').ready(function () {
 			console.log(hashDocument_vaccineV);
 			boolDocVaccineV = true;
 			console.log("boolDocVaccineV " + boolDocVaccineV);
-			try {
-				$("#hashDocumentVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocument_vaccineV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
-			} catch (error) {
-				console.log(error);
-			}
+			$("#hashDocumentVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocument_vaccineV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
+			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
 		reader.readAsArrayBuffer($('#inputDocumentVaccineVer')[0].files[0]);
 
@@ -615,7 +658,6 @@ $('document').ready(function () {
 			console.log("address " + inputAddressUserVaccineVer.value);
 			console.log("boolDocVaccineV " + boolDocVaccineV);
 			console.log("boolDocIDVaccineV " + boolDocIDVaccineV);
-			//bisogna restituire in base al rusiltato un diverso colore di allert
 
 			contract.methods.verificationVaccine(hashDocumentID_vaccineV, hashDocument_vaccineV, inputAddressUserVaccineVer.value).call((error, result) => {
 				if (error) { console.log(error) }
@@ -623,33 +665,27 @@ $('document').ready(function () {
 					console.log("RESULT: " + result[0]);
 					console.log("RESULT: " + result[1]);
 					if (result[0]) {
-						$("#allertVaccineVerification").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>VACCINE CERTIFICATE FIND!</strong><br><strong>Time block mined: </strong>' + timeConverter(result[1]) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertVaccineVerification").html('<div class="alert alert-success alert-dismissible fade show" id="allert role="alert"><p style="word-break: break-all;"><strong>VACCINE CERTIFICATE FIND!</strong><br><strong>Time block mined: </strong>' + timeConverter(result[1]) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						setTimeout(function () { $("#allert").remove(); }, 60000);
 					} else {
-						$("#allertVaccineVerification").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>NO VACCINE CERTIFICATE FIND!</strong><br></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						$("#allertVaccineVerification").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>NO VACCINE CERTIFICATE FIND!</strong><br></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+						setTimeout(function () { $("#allert").remove(); }, 60000);
 					}
 					inputAddressUserVaccineVer.value = '';
 				}
 			});
-
-			//prova
-			//var result = 'dspunfvsdpoivnwoivfewhvnourvnoiranfvdfjbindfboijreajbvmeràoinboreijb';
-			//$("#allertVaccineVerification").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><p style="word-break: break-all;"><strong>RESULT!</strong><br>' + result + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-
 			boolDocVaccineV = false;
 			boolDocIDVaccineV = false;
 			console.log("ID set " + boolDocVaccineV);
 			console.log("TEst set " + boolDocIDVaccineV);
-			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
 
 		}
 		else {
-			//const stringa = "dsfkjsndiuvsdiuv idsunfcsdiau \n\n <p>dsinfsdin\n\n\t sdnv\t</p>";
-			$("#allertVaccineVerification").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>ERROR!</strong><br>Some errore in input<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
-
-			//inputAddressUserVaccineVer.value = '';
-			//setTimeout(function () { $("#allertVaccine").remove(); }, 10000);
+			$("#allertVaccineVerification").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><strong>ERROR!</strong><br>Some errore in input<button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			setTimeout(function () { $("#allert").remove(); }, 10000);
 		}
 	}
+
 
 
 

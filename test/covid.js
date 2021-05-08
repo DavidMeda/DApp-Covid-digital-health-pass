@@ -3,13 +3,19 @@ const utils = require("./helpers/utils");
 const jsSHA = require("jssha");
 
 contract("Covid Test", (accounts) =>{
-	let [owner, minestry, hub, user1, user2] = accounts;
+	let [owner, minestry, hub, user1] = accounts;
+
 
 	it("should be able to add minestry from owner", async() =>{
 		const covidInstance = await covid_contract.deployed();
 		const minestryResult = await covidInstance.addMinestry(minestry, {from: owner});
-		assert.equal(minestryResult.receipt.status, true);
-		assert.equal(minestryResult.logs[0].args.ministryAddress, minestry);
+		assert.equal(minestryResult.logs[0].args.minestryAddress, minestry);
+	})
+
+	it("should be able to remove minestry from owner", async() =>{
+		const covidInstance = await covid_contract.deployed();
+		const minestryResult = await covidInstance.removeMinestry(minestry, {from: owner});
+		assert.equal(minestryResult.logs[0].args.minestryAddres, minestry);
 	})
 
 	it("shouldn't be able to add minestry from anyway isn't owner of contract",async() =>{
@@ -17,15 +23,34 @@ contract("Covid Test", (accounts) =>{
         await utils.shouldThrow(covidInstance.addMinestry(hub, {from: minestry}));
 	})
 
+	it("shouldn't be able to remove minestry from anyway isn't owner of contract",async() =>{
+		const covidInstance = await covid_contract.deployed();
+        await utils.shouldThrow(covidInstance.removeMinestry(hub, {from: minestry}));
+	})
+
+
 	it("should be able to add hub from minestry", async() =>{
 		const covidInstance = await covid_contract.deployed();
+		await covidInstance.addMinestry(minestry, {from: owner});
 		const hubResult = await covidInstance.addHub(hub, {from: minestry});
 		assert.equal(hubResult.logs[0].args.hubAddress, hub);
 	})
 
+	it("should be able to remove hub from minestry", async() =>{
+		const covidInstance = await covid_contract.deployed();
+		const hubResult = await covidInstance.removeHub(hub, {from: minestry});
+		assert.equal(hubResult.logs[0].args.hubAddres, hub);
+	})
+
 	it("shouldn't be able to add hub from anyway isn't minestry",async() =>{
 		const covidInstance = await covid_contract.deployed();
+		await covidInstance.addMinestry(minestry, {from: owner});
         await utils.shouldThrow(covidInstance.addHub(user1, {from: hub}));
+	})
+
+	it("shouldn't be able to remove hub from anyway isn't minestry",async() =>{
+		const covidInstance = await covid_contract.deployed();
+        await utils.shouldThrow(covidInstance.removeHub(user1, {from: hub}));
 	})
 
 	function calculateHashBytes (data) {
@@ -39,6 +64,7 @@ contract("Covid Test", (accounts) =>{
 		const covidInstance = await covid_contract.deployed();
 		const hash_ID = calculateHashBytes("DOCUMENT_ID");
 		const hash_Vaccine = calculateHashBytes("VACCINE");
+		await covidInstance.addHub(hub, {from: minestry});
 		const vaccineResult = await covidInstance.approveVaccine(hash_ID, hash_Vaccine, user1, {from: hub});
 		assert.equal(vaccineResult.logs[0].args.user, user1); 
 		assert.equal(vaccineResult.logs[0].args.from, hub);
@@ -51,11 +77,6 @@ contract("Covid Test", (accounts) =>{
 		const hash_ID = calculateHashBytes("DOCUMENT_ID");
 		const hash_Vaccine = calculateHashBytes("VACCINE");
 		await utils.shouldThrow( covidInstance.approveVaccine(hash_ID, hash_Vaccine, user1, {from: hub}));
-		/*
-		assert.equal(vaccineResult.logs[0].args.user, user2); 
-		assert.equal(vaccineResult.logs[0].args.from, hub);
-		assert.equal(vaccineResult.logs[0].args.result, false);  
-		*/
 	})
 
 	it("shouldn't be approve vacine of user from anyway isn't hub", async()=>{
@@ -117,7 +138,6 @@ contract("Covid Test", (accounts) =>{
 		assert.equal(testResult[0], false);
 		assert.equal(testResult[1].toNumber(), 0);
 	})
-
 
 
 })
