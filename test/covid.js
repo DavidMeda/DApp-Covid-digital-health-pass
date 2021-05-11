@@ -3,7 +3,18 @@ const utils = require("./helpers/utils");
 const jsSHA = require("jssha");
 
 contract("Covid Test", (accounts) =>{
-	let [owner, minestry, hub, user1] = accounts;
+	const owner = accounts;
+	console.log(accounts);
+	let minestryAcc = web3.eth.accounts.create(web3.utils.randomHex(1));
+	const minestry = minestryAcc['address'];
+	let hubAcc = web3.eth.accounts.create(web3.utils.randomHex(2));
+	const hub = hubAcc['address'];
+	let user1Acc = web3.eth.accounts.create(web3.utils.randomHex(3));
+	const user1 = user1Acc['address'];
+
+	console.log(minestryAcc);
+	console.log(hubAcc);
+	console.log(user1Acc);
 
 
 	it("should be able to add minestry from owner", async() =>{
