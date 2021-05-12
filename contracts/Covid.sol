@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 ///@title contract for covid healthy documentation passport
 ///@author Davide Medaglia
 contract Covid is Ownable {
-    //@ministries: if minestry is set address_minestry->true, otherwise address_minestry->false
+    //@ministries: if ministry is set address_ministry->true, otherwise address_ministry->false
     mapping (address => bool) public ministries;
     //@hubs: if hubs is set address_hub->true, otherwise address_hub->false
     mapping (address => bool) public hubs;
@@ -27,12 +27,12 @@ contract Covid is Ownable {
     event testPublish(address indexed user, address indexed from, bytes32 hashTest, uint time, bool positivity);
     event vaccinePublish(address indexed user, address indexed from, bytes32 hashCertificate, uint time);
     event newHub(address indexed hubAddress, address indexed from, uint time);
-    event newMinestry(address indexed minestryAddress, address indexed from, uint time);
+    event newMinistry(address indexed ministryAddress, address indexed from, uint time);
     event deletedHub(address indexed hubAddres, address indexed from, uint time);
-    event deletedMinestry(address indexed minestryAddres, address indexed from, uint time);
+    event deletedMinistry(address indexed ministryAddres, address indexed from, uint time);
     
-    modifier onlyMinestry() {
-        require(ministries[msg.sender]==true, "Only Minestry can add new Hub");
+    modifier onlyMinistry() {
+        require(ministries[msg.sender]==true, "Only Ministry can add new Hub");
         _;
     }
     
@@ -41,22 +41,22 @@ contract Covid is Ownable {
         _;
     }
     
-    function addMinestry(address _ministryAddress) public onlyOwner{
+    function addMinistry(address _ministryAddress) public onlyOwner{
         ministries[_ministryAddress] = true;
-        emit newMinestry(_ministryAddress, msg.sender, block.timestamp);
+        emit newMinistry(_ministryAddress, msg.sender, block.timestamp);
     }    
 
-    function removeMinestry(address _ministryAddress) public onlyOwner{
+    function removeMinistry(address _ministryAddress) public onlyOwner{
         ministries[_ministryAddress] = false;
-        emit deletedMinestry(_ministryAddress, msg.sender, block.timestamp);
+        emit deletedMinistry(_ministryAddress, msg.sender, block.timestamp);
     }    
     
-    function addHub(address _hubAddress) public onlyMinestry{
+    function addHub(address _hubAddress) public onlyMinistry{
         hubs[_hubAddress] = true;
         emit newHub(_hubAddress, msg.sender, block.timestamp);
     }
 
-    function removeHub(address _hubAddress) public onlyMinestry{
+    function removeHub(address _hubAddress) public onlyMinistry{
         hubs[_hubAddress] = false;
         emit deletedHub(_hubAddress, msg.sender, block.timestamp);
     }

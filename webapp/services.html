@@ -39,12 +39,9 @@
                      </a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link">Operations</a>
+                     <a class="nav-link">Services</a>
                      <span class="sr-only">(current)</span>
                   </li>
-                  <!--li class="nav-item">
-                     <a class="nav-link" href="">Verification</a>
-                  </li-->
                </ul>
             </div>
          </div>
@@ -54,42 +51,41 @@
       <div class="img-responsive py-5"
          style="background-image:url(/Image/background.jpg); opacity:0.9;margin-left: 50px;margin-right: 50px;">
          <div class="container text-center text-white">
-            <h1><strong>Covid digital health passports</strong></h1>
+            <p></p>
+            <h1><strong>Covid Digital Health Pass</strong></h1>
             <h5>
-               <br>It's possible to add and remove Minestries and Hubs only by autorizated.
-               <br>It's possible to publish antibody test result and vaccine certificate.
-               <br>It's possible to verificate antibody test result and vaccine certificate.
-               <br>
+
                <div id="AddressContract"></div>
                <div id="AddressAccount"></div>
             </h5>
+            <p></p>
          </div>
       </div>
 
-      <div class="container" id="minestry and hub add" style="max-width:1300px">
+      <div class="container" id="ministry and hub add" style="max-width:1300px">
          <div class="row">
             <div class="col">
-               <div class="container" id="add minestry"
+               <div class="container" id="add ministry"
                   style="margin-bottom: 10px;margin-top: 10px;background-color: rgba(0, 0, 0, 0.05);padding-top: 10px;padding-bottom: 10px;">
-                  <h2 style="text-align:center"><strong>Add new MINESTRY</strong></h2>
+                  <h2 style="text-align:center"><strong>Add new Ministry of Health</strong></h2>
                   <p>
                   <h5>
-                     <br>This section provide to add MINESTRY to administer the autorizated Hubs.
-                     <br>Only owner of contract is allowed to add new Minestry.
-                     <br>It's necessary to use a unique address for each Minestry.
+                     <br>This section provide to add MINISTRY of Health to administer the autorizated Hubs.
+                     <br>Only owner of contract is allowed to add new Ministry.
+                     <br>It's necessary to use a unique address for each Ministry.
                   </h5>
                   </p>
                   <div class="row-6">
-                     <label for="inputAddressMinestry">Insert address of Minestry:</label>
+                     <label for="inputAddressMinistry">Insert address of Ministry:</label>
                      <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Minestry address"
-                           aria-label="Recipient's hub" aria-describedby="basic-addon2" id="inputAddressMinestry">
+                        <input type="text" class="form-control" placeholder="Ministry address"
+                           aria-label="Recipient's hub" aria-describedby="basic-addon2" id="inputAddressMinistry">
                         <div class="input-group-append">
-                           <button class="btn btn-primary" type="button" id="buttonAddressMinestry">Submit</button>
+                           <button class="btn btn-primary" type="button" id="buttonAddressMinistry">Submit</button>
                         </div>
                      </div>
                   </div>
-                  <div id="allertAddMinestry"></div>
+                  <div id="allertAddMinistry"></div>
                </div>
             </div>
             <div class="col-6">
@@ -100,7 +96,7 @@
                   <h5>
                      <br>This section provide to add HUB that are autorizated to test and vacinate people against
                      COVID-19.
-                     <br>Only Minestry is allowed to add new Hub.
+                     <br>Only Ministry is allowed to add new Hub.
                      <br>It's necessary to use a unique address for each Hub.
                   </h5>
                   </p>
@@ -119,30 +115,30 @@
             </div>
          </div>
       </div>
-      <div class="container" id="minestry and hub remove" style="max-width:1300px">
+      <div class="container" id="ministry and hub remove" style="max-width:1300px">
          <div class="row">
             <div class="col">
-               <div class="container" id="add minestry"
+               <div class="container" id="add ministry"
                   style="margin-bottom: 10px;margin-top: 10px;background-color: rgba(0, 0, 0, 0.05);padding-top: 10px;padding-bottom: 10px;">
-                  <h2 style="text-align:center"><strong>Remove MINESTRY</strong></h2>
+                  <h2 style="text-align:center"><strong>Remove Ministry of Health</strong></h2>
                   <p>
                   <h5>
-                     <br>This section provide to remove MINESTRY from medical authorities.
-                     <br>Only owner of contract is allowed to remove a Minestry.
-                     <br>It's necessary to use a unique address of the Minestry.
+                     <br>This section provide to remove Ministry of Health from medical authorities.
+                     <br>Only owner of contract is allowed to remove a Ministry.
+                     <br>It's necessary to use a unique address of the Ministry.
                   </h5>
                   </p>
                   <div class="row-6">
-                     <label for="inputAddressMinestry2">Insert address of Minestry:</label>
+                     <label for="inputAddressMinistry2">Insert address of Ministry:</label>
                      <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Minestry address"
-                           aria-label="Recipient's hub" aria-describedby="basic-addon2" id="inputAddressMinestry2">
+                        <input type="text" class="form-control" placeholder="Ministry address"
+                           aria-label="Recipient's hub" aria-describedby="basic-addon2" id="inputAddressMinistry2">
                         <div class="input-group-append">
-                           <button class="btn btn-primary" type="button" id="buttonAddressMinestry2">Submit</button>
+                           <button class="btn btn-primary" type="button" id="buttonAddressMinistry2">Submit</button>
                         </div>
                      </div>
                   </div>
-                  <div id="allertRemoveMinestry"></div>
+                  <div id="allertRemoveMinistry"></div>
                </div>
             </div>
             <div class="col-6">
@@ -153,7 +149,7 @@
                   <h5>
                      <br>This section provide to remove HUB that are autorizated to test and vacinate people against
                      COVID-19.
-                     <br>Only Minestry is allowed to remove a Hub.
+                     <br>Only Ministry is allowed to remove a Hub.
                      <br>It's necessary to use a unique address for each Hub.
                   </h5>
                   </p>
@@ -355,7 +351,7 @@
             <div class="col-6">
                <div class="container" id="Test Verification"
                   style="background-color: rgba(0, 0, 0, 0.05);margin-bottom: 10px;margin-top: 10px;padding-top: 10px;padding-bottom: 10px;">
-                  <h2 style="text-align:center"><strong>Test certificate verification</strong></h2>
+                  <h2 style="text-align:center"><strong>Test result verification</strong></h2>
                   <p>
                      <br>This section provide to verificate antibody test result.
                      <br>It's necessary to identify person with document ID and provide:
@@ -416,9 +412,9 @@
                                     id="radioTest4" aria-label="...">
                               </div>
                               <div class="col">
-                                 <label>Insert hash or CID of file stored in IPFS:</label>
+                                 <label>Insert lik or CID of file stored in IPFS:</label>
                                  <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Hash or CID"
+                                    <input type="text" class="form-control" placeholder="Link or CID"
                                        aria-label="Recipient's hub" aria-describedby="basic-addon2" id="URLDocumentTest"
                                        disabled>
                                     <div class="input-group-append">
@@ -510,9 +506,9 @@
                                     id="radioVaccine4" aria-label="..." style="vertical-align: baseline">
                               </div>
                               <div class="col">
-                                 <label>Insert hash or CID of file stored in IPFS:</label>
+                                 <label>Insert link or CID of file stored in IPFS:</label>
                                  <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder=" Hash or CID"
+                                    <input type="text" class="form-control" placeholder="Link or CID"
                                        aria-label="Recipient's hub" aria-describedby="basic-addon2"
                                        id="URLDocumentVaccine" disabled>
                                     <div class="input-group-append">
@@ -549,7 +545,7 @@
 
    <footer class="bg-light text-center text-white">
       <div class="container p-2">
-         <span class="text-dark">DApp - Covid digital health passports</span>
+         <span class="text-dark">DApp - Covid Digital Health Pass</span>
       </div>
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.3);">
          <p>© 2021 Copyright: Davide Medaglia</p>

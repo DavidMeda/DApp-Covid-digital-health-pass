@@ -61,75 +61,75 @@ async function init() {
 
 $('document').ready(function () {
 
-	//ADD MINESTRY
-	document.getElementById("buttonAddressMinestry").addEventListener('click', addMinestry);
-	const inputAddressMinestry = document.getElementById("inputAddressMinestry")
+	//ADD MINISTRY
+	document.getElementById("buttonAddressMinistry").addEventListener('click', addMinistry);
+	const inputAddressMinistry = document.getElementById("inputAddressMinistry")
 
-	async function addMinestry() {
-		if (inputAddressMinestry.value.startsWith("0x")) {
+	async function addMinistry() {
+		if (inputAddressMinistry.value.startsWith("0x")) {
 
 			console.log("MyAddress: " + ethereum.selectedAddress);
-			console.log("Minestri address: " + inputAddressMinestry.value);
-			contract.methods.addMinestry(inputAddressMinestry.value).send({ from: ethereum.selectedAddress }, (error, result) => {
+			console.log("Ministry address: " + inputAddressMinistry.value);
+			contract.methods.addMinistry(inputAddressMinistry.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log(error) }
 				else {
 					console.log("Hash transaction: " + result);
-					$('#allertAddMinestry').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending!</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
-					contract.events.newMinestry()
+					$('#allertAddMinistry').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
+					contract.events.newMinistry()
 						.on('data', (event) => {
 							console.log("EVENT obj: " + event);
 							const blockNumber = event["blockNumber"];
 							const from = event["returnValues"]["from"];
-							const newMinestry = event["returnValues"]["minestryAddress"];
+							const newMinistry = event["returnValues"]["ministryAddress"];
 							const time = timeConverter(event["returnValues"]["time"]);
-							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Minestry address: </strong>' + newMinestry;
+							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Ministry address: </strong>' + newMinistry;
 							setTimeout(function () { $("#allert").remove(); }, 1);
-							$("#allertAddMinestry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							$("#allertAddMinistry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 
 						}).on('error', console.error);
-					inputAddressMinestry.value = '';
+					inputAddressMinistry.value = '';
 				}
 
 			});
 
 		}
 		else {
-			$("#allertAddMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address MINESTRY must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			$("#allertAddMinistry").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address MINISTRY must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 			setTimeout(function () { $("#allert").remove(); }, 10000);
 		}
 	}
 
-	//REMOVE MINESTRY
-	document.getElementById("buttonAddressMinestry2").addEventListener('click', removeMinestry);
-	const inputAddressMinestryR = document.getElementById("inputAddressMinestry2")
+	//REMOVE MINISTRY
+	document.getElementById("buttonAddressMinistry2").addEventListener('click', removeMinistry);
+	const inputAddressMinistryR = document.getElementById("inputAddressMinistry2")
 
-	async function removeMinestry() {
-		if (inputAddressMinestryR.value.startsWith("0x")) {
+	async function removeMinistry() {
+		if (inputAddressMinistryR.value.startsWith("0x")) {
 
 			console.log("MyAddress: " + ethereum.selectedAddress);
-			console.log("Minestri address: " + inputAddressMinestryR.value);
-			contract.methods.removeMinestry(inputAddressMinestryR.value).send({ from: ethereum.selectedAddress }, (error, result) => {
+			console.log("Ministry address: " + inputAddressMinistryR.value);
+			contract.methods.removeMinistry(inputAddressMinistryR.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log(error) }
 				else {
 					console.log("Hash transaction: " + result);
-					$('#allertRemoveMinestry').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending!</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
-					contract.events.deletedMinestry()
+					$('#allertRemoveMinistry').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
+					contract.events.deletedMinistry()
 						.on('data', (event) => {
 							console.log(event);
 							const blockNumber = event["blockNumber"];
 							const from = event["returnValues"]["from"];
-							const newMinestry = event["returnValues"]["minestryAddres"];
+							const newMinistry = event["returnValues"]["ministryAddres"];
 							const time = timeConverter(event["returnValues"]["time"]);
-							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Minestry address: </strong>' + newMinestry;
+							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Ministry address: </strong>' + newMinistry;
 							setTimeout(function () { $("#allert").remove(); }, 1);
-							$("#allertRemoveMinestry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+							$("#allertRemoveMinistry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 						}).on('error', console.error);
-					inputAddressMinestryR.value = '';
+					inputAddressMinistryR.value = '';
 				}
 			});
 		}
 		else {
-			$("#allertRemoveMinestry").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address MINESTRY must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
+			$("#allertRemoveMinistry").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Address MINISTRY must start with \'0x\'</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 			setTimeout(function () { $("#allert").remove(); }, 10000);
 
 		}
@@ -149,7 +149,7 @@ $('document').ready(function () {
 				if (error) { console.log(error) }
 				else {
 					console.log("Hash transaction: " + result);
-					$('#allertAddHub').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending!</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
+					$('#allertAddHub').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.newHub()
 						.on('data', (event) => {
 							console.log(event);
@@ -157,7 +157,7 @@ $('document').ready(function () {
 							const from = event["returnValues"]["from"];
 							const hubAddress = event["returnValues"]["hubAddress"];
 							const time = timeConverter(event["returnValues"]["time"]);
-							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Minestry address: </strong>' + hubAddress;
+							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Ministry address: </strong>' + hubAddress;
 							setTimeout(function () { $("#allert").remove(); }, 1);
 							$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show"  role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 							inputAddressHub.value = '';
@@ -185,7 +185,7 @@ $('document').ready(function () {
 				if (error) { console.log(error) }
 				else {
 					console.log("Hash transaction: " + result);
-					$('#allertRemoveHub').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending!</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
+					$('#allertRemoveHub').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.deletedHub()
 						.on('data', (event) => {
 							console.log(event);
@@ -193,7 +193,7 @@ $('document').ready(function () {
 							const from = event["returnValues"]["from"];
 							const hubAddress = event["returnValues"]["hubAddres"];
 							const time = timeConverter(event["returnValues"]["time"]);
-							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Minestry address: </strong>' + hubAddress;
+							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Ministry address: </strong>' + hubAddress;
 							setTimeout(function () { $("#allert").remove(); }, 1);
 							$("#allertRemoveHub").html('<div class="alert alert-success alert-dismissible fade show"  role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 							inputAddressHubR.value = '';
@@ -252,6 +252,7 @@ $('document').ready(function () {
 		reader.onload = async function () {
 			let path;
 			if (document.getElementById('ipfsTest').checked) {
+				$('#hashDocumentTest').html('<div class="alert alert-secondary"  role="allert" ><p "><strong>Upload to IPFS...</strong><br></p></div>');
 				const res = await sendIpfs(reader.result);
 				path = res["path"];
 				console.log(res["path"]);
@@ -291,7 +292,7 @@ $('document').ready(function () {
 				if (error) { console.log("FAIL: " + error) }
 				else {
 					console.log("Hash transaction: " + result);
-					$('#allertTestPublish').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending!</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
+					$('#allertTestPublish').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.testPublish().on('data', (event) => {
 						console.log(event);
 						const blockNumber = event["blockNumber"];
@@ -365,6 +366,7 @@ $('document').ready(function () {
 		reader.onload = async function () {
 			let path;
 			if (document.getElementById('ipfsVaccine').checked) {
+				$('#hashDocumentVaccine').html('<div class="alert alert-secondary"role="allert"><p><strong>Upload to IPFS...</strong><br></p></div>');
 				const res = await sendIpfs(reader.result);
 				path = res["path"];
 				console.log(res["path"]);
@@ -403,7 +405,7 @@ $('document').ready(function () {
 				if (error) { console.log(error) }
 				else {
 					console.log("Hash transaction: " + result);
-					$('#allertVaccinePublish').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending!</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
+					$('#allertVaccinePublish').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.vaccinePublish().on('data', (event) => {
 						console.log(event);
 						const blockNumber = event["blockNumber"];
@@ -471,8 +473,16 @@ $('document').ready(function () {
 	});
 
 	document.getElementById('butURLDocumentTest').addEventListener('click', async () => {
+		let cid;
+		if (URLDocumentTest.value.trim().startsWith("http")) {
+			cid = URLDocumentTest.value.trim().substring(21);
+			console.log(typeof cid);
+		}
+		else {
+			cid = URLDocumentTest.value.trim();
+		}
 		const chunks = []
-		for await (const chunk of ipfs.cat(URLDocumentTest.value)) {
+		for await (const chunk of ipfs.cat(cid)) {
 			chunks.push(chunk)
 		}
 		console.log(chunks);
@@ -595,7 +605,15 @@ $('document').ready(function () {
 
 	document.getElementById('butURLDocumentVaccine').addEventListener('click', async () => {
 		const chunks = []
-		for await (const chunk of ipfs.cat(URLDocumentVaccine.value)) {
+		let cid;
+		if (URLDocumentVaccine.value.trim().startsWith("http")) {
+			cid = URLDocumentVaccine.value.trim().substring(21);
+			console.log(typeof cid);
+		}
+		else {
+			cid = URLDocumentVaccine.value.trim();
+		}
+		for await (const chunk of ipfs.cat(cid)) {
 			chunks.push(chunk)
 		}
 		console.log(chunks);
