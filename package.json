@@ -13,7 +13,7 @@
   "author": "Davide Medaglia",
   "license": "ISC",
   "dependencies": {
-    "@openzeppelin/contracts": "^4.0.0",
+    "@openzeppelin/contracts": "^4.1.0",
     "dotenv": "^9.0.2",
     "ipfs-http-client": "^49.0.4",
     "jssha": "^3.2.0",

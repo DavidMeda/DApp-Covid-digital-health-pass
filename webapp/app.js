@@ -9,9 +9,9 @@ function timeConverter(UNIX_timestamp) {
 }
 
 async function sendIpfs(buffer) {
-	console.log("Submitting file to ipfs...");
+	//console.log("Submitting file to ipfs...");
 	const res = await ipfs.add(buffer);
-	console.log(res);
+	//console.log(res);
 	return res;
 }
 
@@ -27,10 +27,10 @@ async function init() {
 	// Checking if Web3 has been injected by the browser (Mist/MetaMask)
 	if (typeof web3 !== 'undefined') {
 		// Use Mist/MetaMask's provider
-		console.log("WEB3 found!");
+		//console.log("WEB3 found!");
 		web3 = new Web3(window.ethereum);
 	} else {
-		console.log('Injected web3 Not Found!!!')
+		//console.log('Injected web3 Not Found!!!')
 		// fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
 		web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/'));
 	}
@@ -50,9 +50,9 @@ async function init() {
 		MyContract.abi,
 		deployedNetwork && deployedNetwork.address,
 	);
-	console.log("deployedNetwork.address " + deployedNetwork.address);
+	//console.log("deployedNetwork.address " + deployedNetwork.address);
 
-	$('#AddressContract').html('<strong>Contract deployed at address: ' + deployedNetwork.address + '</strong>');
+	$('#AddressContract').html('<strong>Contract address on Ropsten testnet : ' + deployedNetwork.address + '</strong>');
 	$('#AddressAccount').html('<strong>Your address is: ' + ethereum.selectedAddress + '</strong>');
 	ipfs = new IpfsHttpClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
 
@@ -68,22 +68,21 @@ $('document').ready(function () {
 	async function addMinistry() {
 		if (inputAddressMinistry.value.startsWith("0x")) {
 
-			console.log("MyAddress: " + ethereum.selectedAddress);
-			console.log("Ministry address: " + inputAddressMinistry.value);
+			//console.log("MyAddress: " + ethereum.selectedAddress);
+			//console.log("Ministry address: " + inputAddressMinistry.value);
 			contract.methods.addMinistry(inputAddressMinistry.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log(error) }
 				else {
-					console.log("Hash transaction: " + result);
+					//console.log("Hash transaction: " + result);
 					$('#allertAddMinistry').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.newMinistry()
 						.on('data', (event) => {
-							console.log("EVENT obj: " + event);
+							//console.log("EVENT obj: " + event);
 							const blockNumber = event["blockNumber"];
 							const from = event["returnValues"]["from"];
 							const newMinistry = event["returnValues"]["ministryAddress"];
 							const time = timeConverter(event["returnValues"]["time"]);
 							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Ministry address: </strong>' + newMinistry;
-							setTimeout(function () { $("#allert").remove(); }, 1);
 							$("#allertAddMinistry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 
 						}).on('error', console.error);
@@ -106,22 +105,21 @@ $('document').ready(function () {
 	async function removeMinistry() {
 		if (inputAddressMinistryR.value.startsWith("0x")) {
 
-			console.log("MyAddress: " + ethereum.selectedAddress);
-			console.log("Ministry address: " + inputAddressMinistryR.value);
+			//console.log("MyAddress: " + ethereum.selectedAddress);
+			//console.log("Ministry address: " + inputAddressMinistryR.value);
 			contract.methods.removeMinistry(inputAddressMinistryR.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log(error) }
 				else {
-					console.log("Hash transaction: " + result);
+					//console.log("Hash transaction: " + result);
 					$('#allertRemoveMinistry').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.deletedMinistry()
 						.on('data', (event) => {
-							console.log(event);
+							//console.log(event);
 							const blockNumber = event["blockNumber"];
 							const from = event["returnValues"]["from"];
 							const newMinistry = event["returnValues"]["ministryAddres"];
 							const time = timeConverter(event["returnValues"]["time"]);
 							const stringa = '<strong><br>ID transaction: </strong>' + result + '<strong><br>block Number: </strong>' + blockNumber + '<strong><br>Mined at: </strong>' + time + '<strong><br>From address: </strong>' + from + '<strong><br>Ministry address: </strong>' + newMinistry;
-							setTimeout(function () { $("#allert").remove(); }, 1);
 							$("#allertRemoveMinistry").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 						}).on('error', console.error);
 					inputAddressMinistryR.value = '';
@@ -142,23 +140,22 @@ $('document').ready(function () {
 
 	async function addHub() {
 		if (inputAddressHub.value.startsWith("0x")) {
-			console.log("MyAddress: " + ethereum.selectedAddress);
-			console.log("Hub address: " + inputAddressHub.value);
+			//console.log("MyAddress: " + ethereum.selectedAddress);
+			//console.log("Hub address: " + inputAddressHub.value);
 
 			contract.methods.addHub(inputAddressHub.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log(error) }
 				else {
-					console.log("Hash transaction: " + result);
+					//console.log("Hash transaction: " + result);
 					$('#allertAddHub').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.newHub()
 						.on('data', (event) => {
-							console.log(event);
+							//console.log(event);
 							const blockNumber = event["blockNumber"];
 							const from = event["returnValues"]["from"];
 							const hubAddress = event["returnValues"]["hubAddress"];
 							const time = timeConverter(event["returnValues"]["time"]);
 							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Ministry address: </strong>' + hubAddress;
-							setTimeout(function () { $("#allert").remove(); }, 1);
 							$("#allertAddHub").html('<div class="alert alert-success alert-dismissible fade show"  role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 							inputAddressHub.value = '';
 						}).on('error', console.error);
@@ -178,23 +175,22 @@ $('document').ready(function () {
 
 	async function removeHub() {
 		if (inputAddressHubR.value.startsWith("0x")) {
-			console.log("MyAddress: " + ethereum.selectedAddress);
-			console.log("Hub address: " + inputAddressHubR.value);
+			//console.log("MyAddress: " + ethereum.selectedAddress);
+			//console.log("Hub address: " + inputAddressHubR.value);
 
 			contract.methods.removeHub(inputAddressHubR.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log(error) }
 				else {
-					console.log("Hash transaction: " + result);
+					//console.log("Hash transaction: " + result);
 					$('#allertRemoveHub').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.deletedHub()
 						.on('data', (event) => {
-							console.log(event);
+							//console.log(event);
 							const blockNumber = event["blockNumber"];
 							const from = event["returnValues"]["from"];
 							const hubAddress = event["returnValues"]["hubAddres"];
 							const time = timeConverter(event["returnValues"]["time"]);
 							const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From address: </strong>' + from + '<br><strong>Ministry address: </strong>' + hubAddress;
-							setTimeout(function () { $("#allert").remove(); }, 1);
 							$("#allertRemoveHub").html('<div class="alert alert-success alert-dismissible fade show"  role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 							inputAddressHubR.value = '';
 						}).on('error', console.error);
@@ -216,20 +212,20 @@ $('document').ready(function () {
 		if ($('#inputTestDocumentID')[0].files.length == 0) {
 			$("#hashDocumentIDTest").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!<br>NO file added </strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			setTimeout(function () { $("#allert").remove(); }, 10000);
-			return console.log("No file added");
+			return //console.log("No file added");
 		}
 		let nameFile = $('#inputTestDocumentID')[0].files[0].name;
 		var reader = new FileReader();
 		reader.onload = async function () {
 
 			// const res = await sendIpfs(reader.result);
-			// console.log(res["path"]);
+			// //console.log(res["path"]);
 
 			hashDocumentID_testP = calculateHash(reader.result);
-			console.log("ID  " + hashDocumentID_testP);
+			//console.log("ID  " + hashDocumentID_testP);
 
 			boolDocIDTestP = true;
-			console.log("boolDocIDTestP: " + boolDocIDTestP);
+			//console.log("boolDocIDTestP: " + boolDocIDTestP);
 
 			// const link = "https://ipfs.io/ipfs/" + res["path"];
 			// const linkHtml = '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>'
@@ -246,7 +242,7 @@ $('document').ready(function () {
 		if ($('#inputTestDocument')[0].files.length == 0) {
 			$("#hashDocumentTest").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!<br>NO file added </strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			setTimeout(function () { $("#allert").remove(); }, 10000);
-			return console.log("No file added");
+			return //console.log("No file added");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
@@ -255,13 +251,13 @@ $('document').ready(function () {
 				$('#hashDocumentTest').html('<div class="alert alert-secondary"  role="allert" ><p "><strong>Upload to IPFS...</strong><br></p></div>');
 				const res = await sendIpfs(reader.result);
 				path = res["path"];
-				console.log(res["path"]);
+				//console.log(res["path"]);
 			}
 
 			hashDocument_testP = calculateHash(reader.result);
 			boolDocTestP = true;
-			console.log("boolDocTestP: " + boolDocTestP);
-			console.log("TEST  " + hashDocument_testP);
+			//console.log("boolDocTestP: " + boolDocTestP);
+			//console.log("TEST  " + hashDocument_testP);
 
 			let inner = '<strong>Hash document is: </strong>' + hashDocument_testP;
 			if (document.getElementById('ipfsTest').checked == true) {
@@ -281,20 +277,20 @@ $('document').ready(function () {
 	async function testPublish() {
 		var positivity = document.getElementById("inputPosivity").value;
 		if (inputTestPublish.value.startsWith("0x") && boolDocIDTestP && boolDocTestP && positivity != '') {
-			console.log("boolDocTestP: " + boolDocTestP)
-			console.log("boolDocIDTestP: " + boolDocIDTestP)
-			console.log("hsh ID " + hashDocumentID_testP);
-			console.log("hash TEst " + hashDocument_testP);
-			console.log("Resu " + positivity);
-			console.log("address " + inputTestPublish);
+			//console.log("boolDocTestP: " + boolDocTestP)
+			//console.log("boolDocIDTestP: " + boolDocIDTestP)
+			//console.log("hsh ID " + hashDocumentID_testP);
+			//console.log("hash TEst " + hashDocument_testP);
+			//console.log("Resu " + positivity);
+			//console.log("address " + inputTestPublish);
 
 			contract.methods.approveTest(hashDocumentID_testP, hashDocument_testP, positivity, inputTestPublish.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log("FAIL: " + error) }
 				else {
-					console.log("Hash transaction: " + result);
+					//console.log("Hash transaction: " + result);
 					$('#allertTestPublish').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.testPublish().on('data', (event) => {
-						console.log(event);
+						//console.log(event);
 						const blockNumber = event["blockNumber"];
 						const from = event["returnValues"]["from"];
 						const user = event["returnValues"]["user"];
@@ -304,7 +300,6 @@ $('document').ready(function () {
 						else { positivityResult = 'NEGATIVE' };
 						const hashDocument = event["returnValues"]["hashTest"];
 						const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From Hub address: </strong>' + from + '<br><strong>User address: </strong>' + user + '<br><strong>Result test: </strong>' + positivityResult + '<br><strong>Hash document test: </strong>' + hashDocument;
-						setTimeout(function () { $("#allertTest").remove(); }, 1);
 						$("#allertTestPublish").html('<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 						inputTestPublish.value = '';
 						$("#inputPosivity").get(0).selectedIndex = 0;
@@ -314,8 +309,8 @@ $('document').ready(function () {
 			positivity = '';
 			boolDocIDTestP = false;
 			boolDocTestP = false;
-			console.log("boolDocTestP: " + boolDocTestP)
-			console.log("boolDocIDTestP: " + boolDocIDTestP)
+			//console.log("boolDocTestP: " + boolDocTestP)
+			//console.log("boolDocIDTestP: " + boolDocIDTestP)
 			//setTimeout(function () { $("#allertTest").remove(); }, 10000);
 		}
 		else {
@@ -336,17 +331,17 @@ $('document').ready(function () {
 		if ($('#inputDocumentIDVaccine')[0].files.length == 0) {
 			$("#hashDocumentIDVaccine").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p><strong>ERROR!</strong><br>NO file added </p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			setTimeout(function () { $("#allert").remove(); }, 10000);
-			return console.log("No file inserted");
+			return //console.log("No file inserted");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
 			// const res = await sendIpfs(reader.result);
-			// console.log(res["path"]);
+			// //console.log(res["path"]);
 
 			hashDocumentID_vaccineP = calculateHash(reader.result);
-			console.log(hashDocumentID_vaccineP);
+			//console.log(hashDocumentID_vaccineP);
 			boolDocIDVaccineP = true;
-			console.log("boolDocIDVaccineP " + boolDocIDVaccineP);
+			//console.log("boolDocIDVaccineP " + boolDocIDVaccineP);
 			// const link = "https://ipfs.io/ipfs/" + res["path"];
 			// const linkHtml = + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
 			const inner = '<strong>Hash document is: </strong>' + hashDocumentID_vaccineP;
@@ -360,7 +355,7 @@ $('document').ready(function () {
 		if ($('#inputDocumentVaccine')[0].files.length == 0) {
 			$("#hashDocumentVaccine").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p><strong>ERROR!</strong><br>NO file added </p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			setTimeout(function () { $("#allert").remove(); }, 10000);
-			return console.log("Insert file");
+			return //console.log("Insert file");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
@@ -369,14 +364,14 @@ $('document').ready(function () {
 				$('#hashDocumentVaccine').html('<div class="alert alert-secondary"role="allert"><p><strong>Upload to IPFS...</strong><br></p></div>');
 				const res = await sendIpfs(reader.result);
 				path = res["path"];
-				console.log(res["path"]);
+				//console.log(res["path"]);
 			}
 
 			hashDocument_vaccineP = calculateHash(reader.result);
-			console.log(hashDocument_vaccineP);
+			//console.log(hashDocument_vaccineP);
 			boolDocVaccineP = true;
-			console.log("boolDocVaccineP " + boolDocVaccineP);
-			console.log("boolDocIDVaccineP " + boolDocIDVaccineP);
+			//console.log("boolDocVaccineP " + boolDocVaccineP);
+			//console.log("boolDocIDVaccineP " + boolDocIDVaccineP);
 
 			let inner = '<strong>Hash document is: </strong>' + hashDocument_vaccineP;
 
@@ -395,26 +390,25 @@ $('document').ready(function () {
 	var inputAddressUserVaccine = document.getElementById("inputAddressUserVaccine")
 	async function vaccinePublish() {
 		if (inputAddressUserVaccine.value.startsWith("0x") && boolDocIDVaccineP && boolDocVaccineP) {
-			console.log("ID " + hashDocumentID_vaccineP);
-			console.log("Vacc " + hashDocument_vaccineP);
-			console.log("boolDocVaccineP " + boolDocVaccineP);
-			console.log("boolDocIDVaccineP " + boolDocIDVaccineP);
-			console.log("Address " + inputAddressUserVaccine.value);
+			//console.log("ID " + hashDocumentID_vaccineP);
+			//console.log("Vacc " + hashDocument_vaccineP);
+			//console.log("boolDocVaccineP " + boolDocVaccineP);
+			//console.log("boolDocIDVaccineP " + boolDocIDVaccineP);
+			//console.log("Address " + inputAddressUserVaccine.value);
 
 			contract.methods.approveVaccine(hashDocumentID_vaccineP, hashDocument_vaccineP, inputAddressUserVaccine.value).send({ from: ethereum.selectedAddress }, (error, result) => {
 				if (error) { console.log(error) }
 				else {
-					console.log("Hash transaction: " + result);
+					//console.log("Hash transaction: " + result);
 					$('#allertVaccinePublish').html('<div class="alert alert-secondary" id="allert" role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>Transaction pending...</strong><br>Follow link to Ethersan: <a href="https://ropsten.etherscan.io/tx/' + result + '" class="alert-link">https://ropsten.etherscan.io/tx/' + result + '</a></br></p></div>');
 					contract.events.vaccinePublish().on('data', (event) => {
-						console.log(event);
+						//console.log(event);
 						const blockNumber = event["blockNumber"];
 						const from = event["returnValues"]["from"];
 						const user = event["returnValues"]["user"];
 						const time = timeConverter(event["returnValues"]["time"]);
 						const hashDocument = event["returnValues"]["hashCertificate"];
 						const stringa = '<br><strong>ID transaction: </strong>' + result + '<br><strong>Block Number: </strong>' + blockNumber + '<br><strong>Mined at: </strong>' + time + '<br><strong>From Hub address: </strong>' + from + '<br><strong>User address: </strong>' + user + '<br><strong>Hash document test: </strong>' + hashDocument;
-						setTimeout(function () { $("#allert").remove(); }, 1);
 						$("#allertVaccinePublish").html('<div class="alert alert-success alert-dismissible fade show"  role="alert" style="padding-left:10px;padding-right:20px"><p style="word-break: break-all;"><strong>TRANSACTION EXECUTED!</strong>' + stringa + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 						inputAddressUserVaccine.value = '';
 					}).on('error', console.error);
@@ -423,8 +417,8 @@ $('document').ready(function () {
 
 			boolDocVaccineP = false;
 			boolDocIDVaccineP = false;
-			console.log("boolDocVaccineP set " + boolDocVaccineP);
-			console.log("boolDocIDVaccineP set" + boolDocIDVaccineP);
+			//console.log("boolDocVaccineP set " + boolDocVaccineP);
+			//console.log("boolDocIDVaccineP set" + boolDocIDVaccineP);
 		}
 		else {
 			$("#allertVaccinePublish").html('<div class="alert alert-danger alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>ERROR!</strong><br>Some errore in input</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
@@ -441,15 +435,15 @@ $('document').ready(function () {
 
 	document.getElementById('butUploadDocIDTestVer').addEventListener('click', async () => {
 		if ($('#inputTestVerDocumentID')[0].files.length == 0) {
-			return console.log("Insert file");
+			return //console.log("Insert file");
 		}
 		else {
 			var reader = new FileReader();
 			reader.onload = async function () {
 				hashDocumentID_testV = calculateHash(reader.result);
-				console.log("ID  " + hashDocumentID_testV);
+				//console.log("ID  " + hashDocumentID_testV);
 				boolDocIDTestV = true;
-				console.log("boolDocIDTestV " + boolDocIDTestV);
+				//console.log("boolDocIDTestV " + boolDocIDTestV);
 				$("#hashDocumentIDTestVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocumentID_testV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 				setTimeout(function () { $("#allert").remove(); }, 60000);
 			}
@@ -476,7 +470,7 @@ $('document').ready(function () {
 		let cid;
 		if (URLDocumentTest.value.trim().startsWith("http")) {
 			cid = URLDocumentTest.value.trim().substring(21);
-			console.log(typeof cid);
+			//console.log(typeof cid);
 		}
 		else {
 			cid = URLDocumentTest.value.trim();
@@ -485,12 +479,12 @@ $('document').ready(function () {
 		for await (const chunk of ipfs.cat(cid)) {
 			chunks.push(chunk)
 		}
-		console.log(chunks);
+		//console.log(chunks);
 
 		hashDocument_testV = calculateHash(chunks[0]);
-		console.log("ID  " + hashDocument_testV);
+		//console.log("ID  " + hashDocument_testV);
 		boolDocTestV = true;
-		console.log("boolDocTestV " + boolDocTestV);
+		//console.log("boolDocTestV " + boolDocTestV);
 		const link = "https://ipfs.io/ipfs/" + URLDocumentTest.value;
 		const inner = '<strong>Hash document is: </strong>' + hashDocument_testV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
 		$("#hashDocumentTestVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
@@ -502,14 +496,14 @@ $('document').ready(function () {
 	document.getElementById('butUploadDocTestVer').addEventListener('click', hashFileTestVer);
 	async function hashFileTestVer() {
 		if ($('#inputTestVerDocument')[0].files.length == 0) {
-			return console.log("Insert file");
+			return //console.log("Insert file");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
 			hashDocument_testV = calculateHash(reader.result);
-			console.log("TEST  " + hashDocument_testV);
+			//console.log("TEST  " + hashDocument_testV);
 			boolDocTestV = true;
-			console.log("boolDocIDTestV " + boolDocIDTestV);
+			//console.log("boolDocIDTestV " + boolDocIDTestV);
 			$("#hashDocumentTestVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocument_testV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
@@ -521,20 +515,20 @@ $('document').ready(function () {
 	async function testPublishVer() {
 		if (inputTestVerification.value.startsWith("0x") && boolDocIDTestV && boolDocTestV) {
 
-			console.log("ID " + hashDocumentID_testV);
-			console.log("TEst " + hashDocument_testV);
-			console.log("address " + inputTestVerification.value);
-			console.log("boolDocIDTestV " + boolDocIDTestV);
-			console.log("boolDocTestV  " + boolDocTestV);
+			//console.log("ID " + hashDocumentID_testV);
+			//console.log("TEst " + hashDocument_testV);
+			//console.log("address " + inputTestVerification.value);
+			//console.log("boolDocIDTestV " + boolDocIDTestV);
+			//console.log("boolDocTestV  " + boolDocTestV);
 
 			//bisogna restituire in base al rusiltato un diverso colore di allert
 
 			contract.methods.verificationTest(hashDocumentID_testV, hashDocument_testV, inputTestVerification.value).call((error, result) => {
 				if (error) { console.log(error) }
 				else {
-					console.log("RESULT: " + result[0]);
-					console.log("RESULT: " + result[1]);
-					console.log("RESULT: " + result[2]);
+					//console.log("RESULT: " + result[0]);
+					//console.log("RESULT: " + result[1]);
+					//console.log("RESULT: " + result[2]);
 					let resultPositivity;
 					if (result[2]) { resultPositivity = "POSITIVE"; }
 					else { resultPositivity = "NEGATIVE"; }
@@ -548,8 +542,8 @@ $('document').ready(function () {
 			});
 			boolDocIDTestV = false;
 			boolDocTestV = false;
-			console.log("boolDocIDTestV set " + boolDocIDTestV);
-			console.log("TEST  set " + boolDocTestV);
+			//console.log("boolDocIDTestV set " + boolDocIDTestV);
+			//console.log("TEST  set " + boolDocTestV);
 
 		}
 		else {
@@ -572,14 +566,14 @@ $('document').ready(function () {
 	document.getElementById('butUploadDocIDVaccineVer').addEventListener('click', hashFileIDVaccineVer);
 	async function hashFileIDVaccineVer() {
 		if ($('#inputDocumentIDVaccineVer')[0].files.length == 0) {
-			return console.log("Insert file");
+			return //console.log("Insert file");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
 			hashDocumentID_vaccineV = calculateHash(reader.result);
-			console.log(hashDocumentID_vaccineV);
+			//console.log(hashDocumentID_vaccineV);
 			boolDocIDVaccineV = true;
-			console.log("boolDocIDVaccineV " + boolDocIDVaccineV);
+			//console.log("boolDocIDVaccineV " + boolDocIDVaccineV);
 			$("#hashDocumentIDVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocumentID_vaccineV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
@@ -608,7 +602,7 @@ $('document').ready(function () {
 		let cid;
 		if (URLDocumentVaccine.value.trim().startsWith("http")) {
 			cid = URLDocumentVaccine.value.trim().substring(21);
-			console.log(typeof cid);
+			//console.log(typeof cid);
 		}
 		else {
 			cid = URLDocumentVaccine.value.trim();
@@ -616,12 +610,12 @@ $('document').ready(function () {
 		for await (const chunk of ipfs.cat(cid)) {
 			chunks.push(chunk)
 		}
-		console.log(chunks);
+		//console.log(chunks);
 
 		hashDocument_vaccineV = calculateHash(chunks[0]);
-		console.log("ID  " + hashDocument_vaccineV);
+		//console.log("ID  " + hashDocument_vaccineV);
 		boolDocVaccineV = true;
-		console.log("boolDocTestV " + boolDocVaccineV);
+		//console.log("boolDocTestV " + boolDocVaccineV);
 		const link = "https://ipfs.io/ipfs/" + URLDocumentVaccine.value;
 		const inner = '<strong>Hash document is: </strong>' + hashDocument_vaccineV + '<br><strong>IPFS link:</strong> <a href=' + link + '>' + link + '</a>';
 		$("#hashDocumentVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;">' + inner + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
@@ -632,14 +626,14 @@ $('document').ready(function () {
 	document.getElementById('butUploadDocVaccineVer').addEventListener('click', hashFileVaccineVer);
 	async function hashFileVaccineVer() {
 		if ($('#inputDocumentVaccineVer')[0].files.length == 0) {
-			return console.log("Insert file");
+			return //console.log("Insert file");
 		}
 		var reader = new FileReader();
 		reader.onload = async function () {
 			hashDocument_vaccineV = calculateHash(reader.result);
-			console.log(hashDocument_vaccineV);
+			//console.log(hashDocument_vaccineV);
 			boolDocVaccineV = true;
-			console.log("boolDocVaccineV " + boolDocVaccineV);
+			//console.log("boolDocVaccineV " + boolDocVaccineV);
 			$("#hashDocumentVaccineVer").html('<div class="alert alert-primary alert-dismissible fade show" id="allert" role="alert"><p style="word-break: break-all;"><strong>Hash document is: </strong>' + hashDocument_vaccineV + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div>');
 			setTimeout(function () { $("#allert").remove(); }, 60000);
 		}
@@ -652,17 +646,17 @@ $('document').ready(function () {
 	async function vaccinePublishVer() {
 		if (inputAddressUserVaccineVer.value.startsWith("0x") && boolDocIDVaccineV && boolDocVaccineV) {
 
-			console.log("ID " + hashDocumentID_vaccineV);
-			console.log("TEst " + hashDocument_vaccineV);
-			console.log("address " + inputAddressUserVaccineVer.value);
-			console.log("boolDocVaccineV " + boolDocVaccineV);
-			console.log("boolDocIDVaccineV " + boolDocIDVaccineV);
+			//console.log("ID " + hashDocumentID_vaccineV);
+			//console.log("TEst " + hashDocument_vaccineV);
+			//console.log("address " + inputAddressUserVaccineVer.value);
+			//console.log("boolDocVaccineV " + boolDocVaccineV);
+			//console.log("boolDocIDVaccineV " + boolDocIDVaccineV);
 
 			contract.methods.verificationVaccine(hashDocumentID_vaccineV, hashDocument_vaccineV, inputAddressUserVaccineVer.value).call((error, result) => {
 				if (error) { console.log(error) }
 				else {
-					console.log("RESULT: " + result[0]);
-					console.log("RESULT: " + result[1]);
+					//console.log("RESULT: " + result[0]);
+					//console.log("RESULT: " + result[1]);
 					if (result[0]) {
 						$("#allertVaccineVerification").html('<div class="alert alert-success alert-dismissible fade show" id="allert role="alert"><p style="word-break: break-all;"><strong>VACCINE CERTIFICATE FIND!</strong><br><strong>Time block mined: </strong>' + timeConverter(result[1]) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close">  <span aria-hidden="true">×</span>  </button></div></div>');
 					} else {
@@ -673,8 +667,8 @@ $('document').ready(function () {
 			});
 			boolDocVaccineV = false;
 			boolDocIDVaccineV = false;
-			console.log("ID set " + boolDocVaccineV);
-			console.log("TEst set " + boolDocIDVaccineV);
+			//console.log("ID set " + boolDocVaccineV);
+			//console.log("TEst set " + boolDocIDVaccineV);
 
 		}
 		else {
