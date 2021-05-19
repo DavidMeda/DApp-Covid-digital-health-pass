@@ -8,8 +8,8 @@
   },
   "scripts": {
     "start": "npm run test",
-    "dev":"lite-server ",
-    "test": "lite-server "
+    "dev":"lite-server --port $PORT",
+    "test": "lite-server --port $PORT"
   },
   "author": "Davide Medaglia",
   "license": "ISC",
