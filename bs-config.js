@@ -1,6 +1,6 @@
 module.export = {
-    "port": process.env.PORT || 7585,
-    "server": {
-        "baseDir": ["./webapp", "./"]
+    port: process.env.PORT || 7585,
+    server: {
+        baseDir: ["./webapp", "./"]
     }
 }
