@@ -1,7 +1,0 @@
-{
-	"port":7585,
-  "server": {
-    "baseDir": "./src", 
-    "routes": { "/": "./" }
-  }  
-}
