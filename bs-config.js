@@ -1,6 +1,6 @@
 module.export={
-    port: process.env.PORT || 8080,
-    files:["./**/*.{html,css,js}"],
+    port: 7585,
+    
     server:{
         baseDir:"./webapp",
         routes: { "/": "./" }
