@@ -1,5 +1,5 @@
 {
-  "name": "covid-digital-health-pass",
+  "name": "covid-digital-pass",
   "version": "1.0.0",
   "description": "",
   "main": "truffle.js",
@@ -7,9 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "start": "npm run test",
-    "dev":"lite-server --port $PORT",
-    "test": "lite-server --port $PORT"
+    "dev": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Davide Medaglia",
   "license": "ISC",

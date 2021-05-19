@@ -43,7 +43,7 @@ async function init() {
 		}
 	}
 
-	const MyContract = await $.getJSON("/build/contracts/Covid.json");
+	const MyContract = await $.getJSON("Covid.json");
 	const networkId = await web3.eth.net.getId();
 	const deployedNetwork = MyContract.networks[networkId];
 	contract = new web3.eth.Contract(
