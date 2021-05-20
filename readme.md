@@ -22,7 +22,7 @@ Project is avariable to [http://152.70.170.38:3000]
 ***
 A little intro about the installation. 
 ```
-$ git clone https://example.com
+$ git clone https://github.com/DavidMeda/DApp-Covid-digital-health-pass.git
 $ cd ../path/to/the/file
 $ npm install
 $ npm run dev
