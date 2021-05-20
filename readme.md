@@ -9,11 +9,11 @@ This is decentralized app runs on the peer-to-peer Etherereum network that use a
 Certificates can only be issued by the authorized medical hub and can be verified by anyone.
 On the "Services" page of the site you can do the following:
 
-    ⋅⋅*Management of the authorizations of affiliated medical hubs
-    ⋅⋅*Publication of antibody test results
-    ⋅⋅*Publication of vaccination certificates
-   ⋅⋅* Verification of the results of the antibody tests already published
-    ⋅⋅*Verification of vaccination certificates already published
+* Management of the authorizations of affiliated medical hubs
+* Publication of antibody test results
+* Publication of vaccination certificates
+* Verification of the results of the antibody tests already published
+* Verification of vaccination certificates already published
 
 On the following page it is possible to consult the data on vaccination and number of COVID-19 infections for each country.
 To interact correctly with this Dapp it is necessary to install the Metamask wallet as a browser plugin. 
@@ -27,6 +27,3 @@ $ cd ../path/to/the/file
 $ npm install
 $ npm run dev
 ```
-| Headline 1 in the tablehead | Headline 2 in the tablehead | Headline 3 in the tablehead |
-| :-------------------------- | :-------------------------: | --------------------------: |
-| text-align left             |      text-align center      |            text-align right |
